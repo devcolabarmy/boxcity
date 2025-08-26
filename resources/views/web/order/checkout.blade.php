@@ -4,8 +4,11 @@
 
 @section('content')
 
-    <script src="https://www.paypal.com/sdk/js?client-id=AR6e2wTLuLlHurDdYKlnbsWymNsaithT5ASiSrt0sC2cDcPCj6htPJQAdpGeyzcaVMtNR15Nw9YVO9Mv&currency=USD"></script>
-    <meta name="csrf-token" content="{{ csrf_token() }}">
+{{--    <script src="https://www.paypal.com/sdk/js?client-id=AR6e2wTLuLlHurDdYKlnbsWymNsaithT5ASiSrt0sC2cDcPCj6htPJQAdpGeyzcaVMtNR15Nw9YVO9Mv&currency=USD"></script>--}}
+<script src="https://js.stripe.com/v3/"></script>
+
+
+<meta name="csrf-token" content="{{ csrf_token() }}">
 
     <div class="container checkout-container">
         {{-- Page Heading --}}
@@ -27,13 +30,14 @@
                     <div class="form-group">
                         <label for="email">Email</label>
                         <input type="email" id="email" name="email" class="form-control" required>
-                        <span id="email-error" style="color: red; font-size: 13px;"></span>
+                        <span id="email-error" style="color: red; font-size: 13px; font-family: 'gilroy-semibolduploaded_file';"></span>
                     </div>
 
                     <!-- Phone -->
                     <div class="form-group">
                         <label for="phone">Phone</label>
                         <input type="text" id="phone" name="phone" class="form-control" required>
+                        <span id="phone-error" style="color: red; font-size: 13px; font-family: 'gilroy-semibolduploaded_file';"></span>
                     </div>
 
                     <!-- Shipping Method -->
@@ -226,7 +230,9 @@
                         <button id="place-order" type="submit" class="btn btn-success btn-lg">Place Order</button>
                     </div>
 
-                    <div id="paypal-button-container"></div>
+{{--                    <div id="paypal-button-container"></div>--}}
+
+                    <button id="stripe-checkout-button" class="stripe-button">Pay with Stripe</button>
                 </form>
             </div>
 
@@ -332,6 +338,7 @@
 
 
             function submitOrderToEcwid() {
+                return new Promise((resolve, reject) => {
                 event.preventDefault();
                 let fullName = $("#full-name").val();
                 let email = $("#email").val();
@@ -575,15 +582,19 @@
                         localStorage.setItem("ecwidOrderId", response.id);
                         {{--window.location.href = "{{route('checkout.thankyou')}}";--}}
                         localStorage.removeItem("cart");
+
+                        resolve(response.id);
                     },
                     error: function (xhr, status, error) {
                         console.error("AJAX Error:", status, error);
                         console.error("Full Error Response:", xhr.responseText);
                         alert("Error: " + (xhr.responseJSON?.error || "Something went wrong."));
+                        reject(error);
                     }
                 });
 
-            };
+                });
+            }
 
 
 
@@ -642,11 +653,9 @@
 
 
             $(document).ready(function () {
-                // Pickup
                 const pickupStateDropdown = $("#pickup-state");
                 const pickupCityDropdown = $("#pickup-city");
 
-                // Delivery
                 const deliveryStateDropdown = $("#shipping-state");
                 const deliveryCityDropdown = $("#shipping-city");
 
@@ -684,105 +693,192 @@
 
 
 
-            paypal.Buttons({
-                createOrder: function(data, actions) {
-                    const totalElement = document.querySelector('.checkout-total');
-                    const email = $("#email").val().trim();
-                    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                    console.log(email);
+            {{--paypal.Buttons({--}}
+            {{--    createOrder: function(data, actions) {--}}
+            {{--        const totalElement = document.querySelector('.checkout-total');--}}
+            {{--        const email = $("#email").val().trim();--}}
+            {{--        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;--}}
+            {{--        console.log(email);--}}
 
-                    if (!emailPattern.test(email)) {
-                        $("#email-error").text("Please enter a valid email address.");
-                        return Promise.reject("Invalid email");
-                    } else {
-                        $("#email-error").text("");
-                    }
-                    if (!totalElement) {
-                        throw new Error("Checkout total element not found.");
-                    }
+            {{--        if (!emailPattern.test(email)) {--}}
+            {{--            $("#email-error").text("Please enter a valid email address.");--}}
+            {{--            return Promise.reject("Invalid email");--}}
+            {{--        } else {--}}
+            {{--            $("#email-error").text("");--}}
+            {{--        }--}}
+            {{--        if (!totalElement) {--}}
+            {{--            throw new Error("Checkout total element not found.");--}}
+            {{--        }--}}
 
-                    // Clean and parse the price
-                    const rawAmount = totalElement.innerText.replace(/[^0-9.]/g, '');
-                    const amount = parseFloat(rawAmount);
+            {{--        // Clean and parse the price--}}
+            {{--        const rawAmount = totalElement.innerText.replace(/[^0-9.]/g, '');--}}
+            {{--        const amount = parseFloat(rawAmount);--}}
 
-                    if (isNaN(amount) || amount <= 0) {
-                        throw new Error("Invalid total amount.");
-                    }
-                    submitOrderToEcwid();
-                    return fetch('{{route("paypal.create")}}', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                        },
-                        body: JSON.stringify({
-                            amount: amount,
-                            email: email
-                        })
-                    })
-                        .then(res => {
-                            if (!res.ok) {
-                                throw new Error("Network response was not ok");
-                            }
-                            return res.json();
-                        })
-                        .then(data => {
-                            if (!data.orderID) {
-                                throw new Error("Order ID not found in response");
-                            }
-                            return data.orderID;
-                        });
+            {{--        if (isNaN(amount) || amount <= 0) {--}}
+            {{--            throw new Error("Invalid total amount.");--}}
+            {{--        }--}}
+            {{--        submitOrderToEcwid();--}}
+            {{--        return fetch('{{route("paypal.create")}}', {--}}
+            {{--            method: 'POST',--}}
+            {{--            headers: {--}}
+            {{--                'Content-Type': 'application/json',--}}
+            {{--                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')--}}
+            {{--            },--}}
+            {{--            body: JSON.stringify({--}}
+            {{--                amount: amount,--}}
+            {{--                email: email--}}
+            {{--            })--}}
+            {{--        })--}}
+            {{--            .then(res => {--}}
+            {{--                if (!res.ok) {--}}
+            {{--                    throw new Error("Network response was not ok");--}}
+            {{--                }--}}
+            {{--                return res.json();--}}
+            {{--            })--}}
+            {{--            .then(data => {--}}
+            {{--                if (!data.orderID) {--}}
+            {{--                    throw new Error("Order ID not found in response");--}}
+            {{--                }--}}
+            {{--                return data.orderID;--}}
+            {{--            });--}}
 
 
-                },
+            {{--    },--}}
 
-                onApprove: function(data, actions) {
-                    return fetch(`{{ route("paypal.capture") }}`)
-                        .then(res => res.json())
-                        .then(result => {
-                            console.log('Payment captured:', result);
+            {{--    onApprove: function(data, actions) {--}}
+            {{--        return fetch(`{{ route("paypal.capture") }}`)--}}
+            {{--            .then(res => res.json())--}}
+            {{--            .then(result => {--}}
+            {{--                console.log('Payment captured:', result);--}}
 
-                            // Get the order ID from localStorage
-                            const ecwidOrderId = localStorage.getItem("ecwidOrderId");
+            {{--                // Get the order ID from localStorage--}}
+            {{--                const ecwidOrderId = localStorage.getItem("ecwidOrderId");--}}
 
-                            if (ecwidOrderId) {
-                                fetch(`https://app.ecwid.com/api/v3/109333282/orders/${ecwidOrderId}`, {
-                                    method: 'PUT',
-                                    headers: {
-                                        'Authorization': 'Bearer secret_Asd3RgYgyNkGaKhN3hke67RHyAkigTXG',
-                                        'Content-Type': 'application/json'
-                                    },
-                                    body: JSON.stringify({
-                                        paymentStatus: "PAID"
-                                    })
-                                })
-                                    .then(updateRes => updateRes.json())
-                                    .then(updateResult => {
-                                        console.log("Ecwid order marked as PAID", updateResult);
+            {{--                if (ecwidOrderId) {--}}
+            {{--                    fetch(`https://app.ecwid.com/api/v3/109333282/orders/${ecwidOrderId}`, {--}}
+            {{--                        method: 'PUT',--}}
+            {{--                        headers: {--}}
+            {{--                            'Authorization': 'Bearer secret_Asd3RgYgyNkGaKhN3hke67RHyAkigTXG',--}}
+            {{--                            'Content-Type': 'application/json'--}}
+            {{--                        },--}}
+            {{--                        body: JSON.stringify({--}}
+            {{--                            paymentStatus: "PAID"--}}
+            {{--                        })--}}
+            {{--                    })--}}
+            {{--                        .then(updateRes => updateRes.json())--}}
+            {{--                        .then(updateResult => {--}}
+            {{--                            console.log("Ecwid order marked as PAID", updateResult);--}}
 
-                                        // Clear order ID
-                                        localStorage.removeItem("ecwidOrderId");
+            {{--                            // Clear order ID--}}
+            {{--                            localStorage.removeItem("ecwidOrderId");--}}
 
-                                        // Redirect to thank you page
-                                        window.location.href = "{{route('checkout.thankyou')}}";
-                                    })
-                                    .catch(err => {
-                                        console.error("Failed to update Ecwid order status:", err);
-                                        alert("Order placed but status update failed. Please contact support.");
-                                    });
-                            } else {
-                                console.warn("Missing Ecwid order ID");
-                                alert("Payment succeeded but order ID is missing.");
-                            }
-                        });
-                },
+            {{--                            // Redirect to thank you page--}}
+            {{--                            window.location.href = "{{route('checkout.thankyou')}}";--}}
+            {{--                        })--}}
+            {{--                        .catch(err => {--}}
+            {{--                            console.error("Failed to update Ecwid order status:", err);--}}
+            {{--                            alert("Order placed but status update failed. Please contact support.");--}}
+            {{--                        });--}}
+            {{--                } else {--}}
+            {{--                    console.warn("Missing Ecwid order ID");--}}
+            {{--                    alert("Payment succeeded but order ID is missing.");--}}
+            {{--                }--}}
+            {{--            });--}}
+            {{--    },--}}
 
-                onCancel: function (data) {
-                    console.log("Payment cancelled by user", data);
-                    window.location.reload(); // 🔁
+            {{--    onCancel: function (data) {--}}
+            {{--        console.log("Payment cancelled by user", data);--}}
+            {{--        window.location.reload(); // 🔁--}}
+            {{--    }--}}
+
+            {{--}).render('#paypal-button-container');--}}
+
+            document.getElementById("stripe-checkout-button").addEventListener("click", async function (e) {
+                e.preventDefault();
+
+                const totalElement = document.querySelector('.checkout-total');
+                const email = document.getElementById("email").value.trim();
+                const phone = document.getElementById("phone").value.trim();
+                const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                const phonePattern = /^(\+1\s?)?(\([0-9]{3}\)|[0-9]{3})[-\s]?[0-9]{3}[-\s]?[0-9]{4}$/;
+                let isValid = true;
+
+                if (!phonePattern.test(phone)) {
+                    document.getElementById("phone-error").innerText = "Please enter a valid phone number.";
+                    isValid = false;
+                } else {
+                    document.getElementById("phone-error").innerText = "";
                 }
 
-            }).render('#paypal-button-container');
+                if (!emailPattern.test(email)) {
+                    document.getElementById("email-error").innerText = "Please enter a valid email address.";
+                    isValid = false;
+                } else {
+                    document.getElementById("email-error").innerText = "";
+                }
+
+                if (!isValid) return;
+
+                if (!totalElement) {
+                    alert("Checkout total element not found.");
+                    return;
+                }
+
+                // Parse amount in dollars
+                const rawAmount = totalElement.innerText.replace(/[^0-9.]/g, '');
+                const amount = parseFloat(rawAmount);
+
+                if (isNaN(amount) || amount <= 0) {
+                    alert("Invalid total amount.");
+                    return;
+                }
+
+                try {
+                    // 🔹 Save Ecwid order first and wait for response
+                    const ecwidOrderId = await submitOrderToEcwid();
+                    console.log("Ecwid Order ID (numeric):", ecwidOrderId);
+
+                    if (!ecwidOrderId) {
+                        alert("Failed to create Ecwid order.");
+                        return;
+                    }
+
+                    // 🔹 Call backend to create Stripe Checkout Session
+                    let response = await fetch("{{ route('stripe.create') }}", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                        },
+                        body: JSON.stringify({
+                            amount: amount,        // in dollars
+                            email: email,
+                            order_id: ecwidOrderId // 🔹 send numeric Ecwid order ID
+                        })
+                    });
+
+                    let data = await response.json();
+
+                    if (data.error) {
+                        console.error("Stripe session error:", data);
+                        alert("Stripe error: " + data.error);
+                        return;
+                    }
+
+                    // 🔹 Redirect to Stripe Checkout
+                    const stripe = Stripe("{{ config('stripe.key') }}");
+                    const result = await stripe.redirectToCheckout({ sessionId: data.session_id });
+
+                    if (result.error) {
+                        alert(result.error.message);
+                    }
+                } catch (err) {
+                    console.error("Stripe Checkout failed:", err);
+                    alert("Payment initialization failed. Please try again.");
+                }
+            });
+
+
 
 
             $('#shipping-method').on('change', function () {

@@ -10,6 +10,8 @@ use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\ProductController;
 use App\Jobs\FetchCategoriesFromApi;
 use App\Http\Controllers\PayPalController;
+use App\Http\Controllers\StripeController;
+
 
 // Homepage route — loads the main page and first product list
 Route::get('/', [ProductController::class, 'index'])->name('home');
@@ -51,7 +53,20 @@ Route::get('/subscription/confirmation', function () {
 })->name('subscription.confirmation');
 
 
-Route::post('/paypal/create-order', [PayPalController::class, 'createOrder'])->name('paypal.create');
-Route::post('/paypal/capture-order', [PayPalController::class, 'captureOrder'])->name('paypal.capture');
-Route::get('/paypal/success', [PayPalController::class, 'captureOrder'])->name('paypal.success');
-Route::get('/paypal/cancel', function () {return 'Payment was cancelled.';})->name('paypal.cancel');
+//Route::post('/paypal/create-order', [PayPalController::class, 'createOrder'])->name('paypal.create');
+//Route::post('/paypal/capture-order', [PayPalController::class, 'captureOrder'])->name('paypal.capture');
+//Route::get('/paypal/success', [PayPalController::class, 'captureOrder'])->name('paypal.success');
+//Route::get('/paypal/cancel', function () {return 'Payment was cancelled.';})->name('paypal.cancel');
+
+
+Route::post('/stripe/create-order', [StripeController::class, 'createOrder'])->name('stripe.create');
+Route::post('/stripe/capture-order', [StripeController::class, 'captureOrder'])->name('stripe.capture');
+Route::get('/stripe/success', [StripeController::class, 'success'])->name('stripe.success');
+Route::get('/stripe/cancel', [StripeController::class, 'cancel'])->name('stripe.cancel');
+
+
+Route::post('/store-ecwid-order', function (Request $request) {
+    session(['ecwid_order_id' => $request->ecwid_order_id]);
+    return response()->json(['success' => true]);
+})->name('store.ecwid.order');
+
