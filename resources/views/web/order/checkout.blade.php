@@ -11,51 +11,102 @@
 <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <div class="container checkout-container">
-        {{-- Page Heading --}}
-        <h2>Checkout</h2>
 
-        <div class="row">
+        <div class="page-title-container">
+            <a href="#" class="back"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <path d="M15 6L9 12L15 18" stroke="#33363F" stroke-width="2"/>
+                </svg></a>
+        <h2 class="page-title">Check Out</h2>
+        </div>
+        <div class="row main-checkout-row">
             {{-- Billing Details Section --}}
-            <div class="col-md-7">
-                <h3>Billing Details</h3>
-
+            <div class="col-md-6">
                 <form id="checkout-form">
-                    <!-- Full Name -->
+                    <div class="info-container">
+                        <h3>Contact Info</h3>
+                    <div class="row field-row">
+                        <div class="col-md-12">
                     <div class="form-group">
-                        <label for="full-name">Full Name</label>
-                        <input type="text" id="full-name" name="full-name" class="form-control" required>
+                        <input type="tel" id="phone" name="phone" class="form-control" required>
+                        <span id="phone-error" style="color: red; font-size: 13px; font-family: 'gilroy-semibolduploaded_file';"></span>
+                    </div>
+                        </div>
+                    </div>
+                    <div class="row field-row">
+                        <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="first-name">First Name</label>
+                        <input type="text" id="first-name" name="first-name" class="form-control" required placeholder="First Name">
+                    </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="last-name">Last Name</label>
+                                <input type="text" id="last-name" name="last-name" class="form-control" required placeholder="Last Name">
+                            </div>
+                        </div>
                     </div>
 
                     <!-- Email -->
                     <div class="form-group">
-                        <label for="email">Email</label>
-                        <input type="email" id="email" name="email" class="form-control" required>
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" name="email" class="form-control" required placeholder="Email Address">
                         <span id="email-error" style="color: red; font-size: 13px; font-family: 'gilroy-semibolduploaded_file';"></span>
                     </div>
 
-                    <!-- Phone -->
-                    <div class="form-group">
-                        <label for="phone">Phone</label>
-                        <input type="text" id="phone" name="phone" class="form-control" required>
-                        <span id="phone-error" style="color: red; font-size: 13px; font-family: 'gilroy-semibolduploaded_file';"></span>
-                    </div>
-
+                   </div>
                     <!-- Shipping Method -->
+                <div class="info-container">
                     <div class="form-group">
-                        <label for="shipping-method">Select Shipping Method</label>
-                        <div class="custom-select-wrapper">
-                        <select id="shipping-method" name="shipping-method" class="form-control">
-                            <option disabled selected hidden>Select Shipping Method</option>
-                            <option value="Pickup method" name="Pick up" >Pick Up</option>
-                            <option value="Delivery details" name="Delivery">Delivery</option>
-                        </select>
+                        <h3>Select Shipping Method</h3>
+
+                        <!-- New image-based options -->
+                        <div class="shipping-method-container">
+                            <div class="shipping-option" data-method="Delivery details">
+                                <div>
+                                    <img src="{{ asset('public/assets/Delivery.png') }}" alt="Delivery">
+                                </div>
+                            </div>
+                            <div class="shipping-option" data-method="Pickup method">
+                                <div>
+                                    <img src="{{ asset('public/assets/PickUp.png') }}" alt="Pick Up">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Hidden field to store selection -->
+                        <input type="hidden" id="shipping-method" name="shipping-method">
                     </div>
-                    </div>
+                </div>
+
+                    <script>
+                        const options = document.querySelectorAll(".shipping-option");
+                        const hiddenInput = document.getElementById("shipping-method");
+
+                        options.forEach(option => {
+                            option.addEventListener("click", () => {
+                                options.forEach(opt => opt.classList.remove("active"));
+                                option.classList.add("active");
+                                hiddenInput.value = option.dataset.method;
+
+                                // Show/Hide sections
+                                if (option.dataset.method === "Pickup method") {
+                                    document.getElementById("pickup-section").classList.remove("d-none");
+                                    document.getElementById("delivery-section").classList.add("d-none");
+                                } else {
+                                    document.getElementById("delivery-section").classList.remove("d-none");
+                                    document.getElementById("pickup-section").classList.add("d-none");
+                                }
+                            });
+                        });
+                    </script>
 
                     <!-- PICKUP SECTION -->
-                    <div id="pickup-section" class="d-none">
 
-                        <!-- Location -->
+                    <div id="pickup-section" class="d-none">
+                        <div class="info-container">
+                        <h3>Pickup Details</h3>
                         <div class="form-group">
                             <label for="pickup-location">Select Store Location</label>
                             <div class="custom-select-wrapper">
@@ -115,8 +166,8 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="pickup-postal">Postal Code</label>
-                                    <input type="text" id="pickup-postal" name="pickup-postal" class="form-control">
+                                    <label for="pickup-postal">Zip Code</label>
+                                    <input type="text" id="pickup-postal" name="pickup-postal" class="form-control" placeholder="Zip Code">
                                 </div>
                             </div>
                         </div>
@@ -127,11 +178,14 @@
                             <textarea id="pickup-address" name="pickup-address" class="form-control"></textarea>
                         </div>
                     </div>
+                    </div>
 
                     <!-- DELIVERY SECTION -->
-                    <div id="delivery-section" class="d-none">
-                        <div id="shipping-address">
 
+                    <div id="delivery-section" class="d-none">
+                        <div class="info-container">
+                        <div id="shipping-address">
+                            <h3>Delivery Details</h3>
                             <!-- Country, State, City, Zip -->
                             <div class="row form-row">
                                 <div class="col-md-6">
@@ -171,7 +225,7 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="shipping-zip">Zip Code</label>
-                                        <input type="text" id="shipping-zip" name="shipping-zip" class="form-control">
+                                        <input type="text" id="shipping-zip" name="shipping-zip" class="form-control" placeholder="Zip Code">
                                     </div>
                                 </div>
                             </div>
@@ -219,10 +273,8 @@
                             <label for="shipping-address-text">Shipping Address</label>
                             <textarea id="shipping-address-text" name="shipping-address-text" class="form-control"></textarea>
                         </div>
-
                     </div>
-
-
+                    </div>
 
                     <!-- Order Button and Total -->
                     <div class="btn-container">
@@ -232,32 +284,25 @@
 
 {{--                    <div id="paypal-button-container"></div>--}}
 
-                    <button id="stripe-checkout-button" class="stripe-button">Pay with Stripe</button>
+                    <button id="stripe-checkout-button" class="stripe-button">Checkout</button>
                 </form>
             </div>
 
             {{-- Order Summary Section --}}
-            <div class="col-md-5">
+            <div class="col-md-4 fade-box">
+                <div class="info-container">
                 <h3>Order Summary</h3>
+                <div id="checkout-cart-container">
+                </div>
+                    <h4 class="checkout-total"></h4>
+                </div>
 
-                <table class="table">
-                    <thead>
-                    <tr>
-                        <th>Product</th>
-                        <th>Quantity</th>
-                        <th>Price</th>
-                    </tr>
-                    </thead>
-                    <tbody id="checkout-cart-list">
-                    <tr><td colspan="3">Loading cart...</td></tr>
-                    </tbody>
-                </table>
             </div>
         </div>
     </div>
 
 
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.19/js/intlTelInput.min.js"></script>
     <script>
         $(document).ready(function () {
 
@@ -302,15 +347,14 @@
 
             let cart = JSON.parse(localStorage.getItem("cart")) || [];
             applyGroupPricingForCheckout(cart);
-            let $cartList = $("#checkout-cart-list");
+            let $cartContainer = $("#checkout-cart-container"); // Change the selector
             let total = 0;
 
-            $cartList.empty();
+            $cartContainer.empty();
             if (cart.length === 0) {
-                $cartList.append("<tr><td colspan='3'>Your cart is empty</td></tr>");
+                $cartContainer.append("<p>Your cart is empty</p>");
             } else {
                 cart.forEach((item, index) => {
-                    // Get the price from the existing table if available
                     let priceCell = document.querySelectorAll('tr[data-label="Total Price :"] td')[index];
                     let itemTotal = 0;
 
@@ -318,32 +362,56 @@
                         let priceText = priceCell.textContent.trim().replace('$', '');
                         itemTotal = parseFloat(priceText);
                     } else {
-                        // fallback to manual calculation
                         itemTotal = item.price * item.quantity;
                     }
 
                     var productDetailUrl = "{{ route('product.detail', ['id' => '000']) }}".replace('000', item.productId);
                     total += itemTotal;
-
-                    $cartList.append(`
-            <tr>
-                <td><a href="${productDetailUrl}" target="_blank">${item.product}</a></td>
-                <td>${item.quantity}</td>
-                <td>$${itemTotal.toFixed(2)}</td>
-            </tr>
-        `);
+        //             let productName = "Corrugated Boxes";
+        //             let productSize = item.product.replace(productName, '').trim();
+        //             const placeholder = `${window.location.origin}/boxcity/public/assets/Placeholder.png`;
+        //
+        //             let thumb = item.productThumb && item.productThumb.trim() !== ""
+        //                 ? item.productThumb
+        //                 : placeholder;
+        //             $cartContainer.append(`
+        //     <div class="cart-item-card">
+        //         <div class="product-image-container">
+        //             <img src="${thumb}" alt="${item.product}">
+        //         </div>
+        //         <div class="product-details">
+        //             <div class="product-name">${productName}</div>
+        //             <div class="product-size"><span>Size:</span> ${productSize}</div>
+        //             <div class="quantity-controls">
+        //             <button class="quantity-btn decrement minus" data-id="${item.productId}">-</button>
+        //             <span class="quantity-value">${item.quantity}</span>
+        //             <button class="quantity-btn increment plus" data-id="${item.productId}">+</button>
+        //         </div>
+        //         </div>
+        //
+        //     </div>
+        // `);
                 });
             }
-            $(".checkout-total").text(`Total: $${total.toFixed(2)}`);
+            $(".checkout-total").html(`Total : <span>$${total.toFixed(2)}</span>`);
+
 
 
             function submitOrderToEcwid() {
                 return new Promise((resolve, reject) => {
                 event.preventDefault();
-                let fullName = $("#full-name").val();
+                let firstName = $("#first-name").val();
+                 let lastName = $("#last-name").val();
+                 let fullName = firstName + lastName;
                 let email = $("#email").val();
-                let phone = $("#phone").val();
+                    let phone = $("#phone").val().trim();
+
+// Ensure +1 is added only once
+                    if (!phone.startsWith("+1")) {
+                        phone = "+1" + phone.replace(/^(\+1)?/, "");
+                    }
                 let shipmethod = $('#shipping-method').val();
+                console.log(shipmethod);
                 let isPickup = (shipmethod === 'Pickup method');
                 let pickupDate = $('#pickup-date').val();
                 let formattedPickupDate = '';
@@ -409,7 +477,7 @@
 
 
 
-                if (!fullName || !email || !phone || !address || !country || !state || !city || !postcode) {
+                if (!firstName || !lastName || !email || !phone || !address || !country || !state || !city || !postcode) {
                     alert("Please fill all fields before placing the order.");
                     return;
                 }
@@ -503,8 +571,8 @@
                     })),
                     billingPerson: {
                         name: fullName,
-                        firstName: fullName.split(" ")[0] || "",
-                        lastName: fullName.split(" ").slice(1).join(" ") || "",
+                        firstName: firstName,
+                        lastName: lastName,
                         street: address,
                         phone: phone,
                         countryCode: "US",
@@ -515,8 +583,8 @@
                     },
                     shippingPerson: {
                         name: fullName,
-                        firstName: fullName.split(" ")[0] || "",
-                        lastName: fullName.split(" ").slice(1).join(" ") || "",
+                        firstName: firstName,
+                        lastName: lastName,
                         phone: phone
                     },
                     shippingOption: {
@@ -690,109 +758,6 @@
                 });
             });
 
-
-
-
-            {{--paypal.Buttons({--}}
-            {{--    createOrder: function(data, actions) {--}}
-            {{--        const totalElement = document.querySelector('.checkout-total');--}}
-            {{--        const email = $("#email").val().trim();--}}
-            {{--        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;--}}
-            {{--        console.log(email);--}}
-
-            {{--        if (!emailPattern.test(email)) {--}}
-            {{--            $("#email-error").text("Please enter a valid email address.");--}}
-            {{--            return Promise.reject("Invalid email");--}}
-            {{--        } else {--}}
-            {{--            $("#email-error").text("");--}}
-            {{--        }--}}
-            {{--        if (!totalElement) {--}}
-            {{--            throw new Error("Checkout total element not found.");--}}
-            {{--        }--}}
-
-            {{--        // Clean and parse the price--}}
-            {{--        const rawAmount = totalElement.innerText.replace(/[^0-9.]/g, '');--}}
-            {{--        const amount = parseFloat(rawAmount);--}}
-
-            {{--        if (isNaN(amount) || amount <= 0) {--}}
-            {{--            throw new Error("Invalid total amount.");--}}
-            {{--        }--}}
-            {{--        submitOrderToEcwid();--}}
-            {{--        return fetch('{{route("paypal.create")}}', {--}}
-            {{--            method: 'POST',--}}
-            {{--            headers: {--}}
-            {{--                'Content-Type': 'application/json',--}}
-            {{--                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')--}}
-            {{--            },--}}
-            {{--            body: JSON.stringify({--}}
-            {{--                amount: amount,--}}
-            {{--                email: email--}}
-            {{--            })--}}
-            {{--        })--}}
-            {{--            .then(res => {--}}
-            {{--                if (!res.ok) {--}}
-            {{--                    throw new Error("Network response was not ok");--}}
-            {{--                }--}}
-            {{--                return res.json();--}}
-            {{--            })--}}
-            {{--            .then(data => {--}}
-            {{--                if (!data.orderID) {--}}
-            {{--                    throw new Error("Order ID not found in response");--}}
-            {{--                }--}}
-            {{--                return data.orderID;--}}
-            {{--            });--}}
-
-
-            {{--    },--}}
-
-            {{--    onApprove: function(data, actions) {--}}
-            {{--        return fetch(`{{ route("paypal.capture") }}`)--}}
-            {{--            .then(res => res.json())--}}
-            {{--            .then(result => {--}}
-            {{--                console.log('Payment captured:', result);--}}
-
-            {{--                // Get the order ID from localStorage--}}
-            {{--                const ecwidOrderId = localStorage.getItem("ecwidOrderId");--}}
-
-            {{--                if (ecwidOrderId) {--}}
-            {{--                    fetch(`https://app.ecwid.com/api/v3/109333282/orders/${ecwidOrderId}`, {--}}
-            {{--                        method: 'PUT',--}}
-            {{--                        headers: {--}}
-            {{--                            'Authorization': 'Bearer secret_Asd3RgYgyNkGaKhN3hke67RHyAkigTXG',--}}
-            {{--                            'Content-Type': 'application/json'--}}
-            {{--                        },--}}
-            {{--                        body: JSON.stringify({--}}
-            {{--                            paymentStatus: "PAID"--}}
-            {{--                        })--}}
-            {{--                    })--}}
-            {{--                        .then(updateRes => updateRes.json())--}}
-            {{--                        .then(updateResult => {--}}
-            {{--                            console.log("Ecwid order marked as PAID", updateResult);--}}
-
-            {{--                            // Clear order ID--}}
-            {{--                            localStorage.removeItem("ecwidOrderId");--}}
-
-            {{--                            // Redirect to thank you page--}}
-            {{--                            window.location.href = "{{route('checkout.thankyou')}}";--}}
-            {{--                        })--}}
-            {{--                        .catch(err => {--}}
-            {{--                            console.error("Failed to update Ecwid order status:", err);--}}
-            {{--                            alert("Order placed but status update failed. Please contact support.");--}}
-            {{--                        });--}}
-            {{--                } else {--}}
-            {{--                    console.warn("Missing Ecwid order ID");--}}
-            {{--                    alert("Payment succeeded but order ID is missing.");--}}
-            {{--                }--}}
-            {{--            });--}}
-            {{--    },--}}
-
-            {{--    onCancel: function (data) {--}}
-            {{--        console.log("Payment cancelled by user", data);--}}
-            {{--        window.location.reload(); // 🔁--}}
-            {{--    }--}}
-
-            {{--}).render('#paypal-button-container');--}}
-
             document.getElementById("stripe-checkout-button").addEventListener("click", async function (e) {
                 e.preventDefault();
 
@@ -904,8 +869,174 @@
                     $('#shipping-address-text').closest('.form-group').show();
                 }
             });
+
+
+
+        $(document).on("click", ".quantity-btn", function () {
+            // Find the parent container that holds the item details
+            let $itemCard = $(this).closest(".cart-item-card");
+            let productId = $itemCard.data("product-id"); // Get the product ID
+            let $quantityValue = $itemCard.find(".quantity-value");
+            let value = parseInt($quantityValue.text());
+            let newQuantity;
+
+            if ($(this).hasClass("increment")) {
+                newQuantity = value + 1;
+                $quantityValue.text(newQuantity);
+            } else if ($(this).hasClass("decrement")) {
+                newQuantity = Math.max(1, value - 1);
+                $quantityValue.text(newQuantity);
+            }
         });
 
+
+
+        $(window).on("scroll", function() {
+            let scrollTop = $(this).scrollTop();
+            let rowHeight = $(".main-checkout-row").outerHeight();
+            let footerTop = $("footer").offset().top; // Footer position
+            let windowHeight = $(window).height();
+
+            // Fade out gradually based on main-checkout-row height
+            let opacity = 1 - (scrollTop / rowHeight);
+            opacity = Math.max(0, Math.min(1, opacity));
+
+            // If footer is in view → force hide
+            if (scrollTop + windowHeight >= footerTop) {
+                opacity = 0;
+            }
+
+            $(".fade-box").css({
+                opacity: opacity,
+                "z-index": opacity <= 0 ? -1 : 1000
+            });
+        });
+
+
+        function checkFadeBoxHeight() {
+            $(".fade-box").each(function() {
+                let $box = $(this);
+                if ($box[0].scrollHeight > 600) {
+                    $box.css({
+                        "overflow-y": "scroll",
+                        "height": "600px"   // lock height
+                    });
+                } else {
+                    $box.css({
+                        "overflow-y": "visible",
+                        "height": "auto"
+                    });
+                }
+            });
+        }
+
+        // Run on page load + resize
+        $(document).ready(checkFadeBoxHeight);
+        $(window).on("resize", checkFadeBoxHeight);
+
+
+        $(document).ready(function () {
+            renderCheckoutCart();
+        });
+
+        // Handle quantity increment/decrement
+            $(document).off("click", ".quantity-btn").on("click", ".quantity-btn", function () {
+                let $itemCard = $(this).closest(".cart-item-card");
+                let productId = $itemCard.data("product-id");
+                let $quantityValue = $itemCard.find(".quantity-value");
+
+                let value = parseInt($quantityValue.text());
+                let newQuantity;
+
+                if ($(this).hasClass("increment")) {
+                    newQuantity = value + 1;
+                } else if ($(this).hasClass("decrement")) {
+                    newQuantity = Math.max(1, value - 1);
+                }
+
+                updateCartQuantity(productId, newQuantity);
+            });
+
+
+            // Update localStorage and re-render
+        function updateCartQuantity(productId, newQuantity) {
+            let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+            let itemToUpdate = cart.find(item => item.productId == productId);
+            if (itemToUpdate) {
+                itemToUpdate.quantity = newQuantity;
+                applyGroupPricingForCheckout(cart);
+                // ✅ save back to localStorage
+                localStorage.setItem("cart", JSON.stringify(cart));
+
+                // ✅ re-render with updated values
+                renderCheckoutCart();
+            }
+        }
+
+        // Render checkout cart
+        function renderCheckoutCart() {
+            let cart = JSON.parse(localStorage.getItem("cart")) || [];
+            let $cartContainer = $("#checkout-cart-container");
+            $cartContainer.empty();
+
+            if (cart.length === 0) {
+                $cartContainer.append("<p>Your cart is empty.</p>");
+            } else {
+                let total = 0;
+
+                cart.forEach(item => {
+                    let itemTotal = item.price * item.quantity;
+                    total += itemTotal;
+
+                    let productName = "Corrugated Boxes";
+                    let productSize = item.product.replace(productName, "").trim();
+                    const placeholder = `${window.location.origin}/boxcity/public/assets/Placeholder.png`;
+
+                    let thumb = item.productThumb && item.productThumb.trim() !== ""
+                        ? item.productThumb
+                        : placeholder;
+
+                    $cartContainer.append(`
+                <div class="cart-item-card" data-product-id="${item.productId}">
+                    <div class="product-image-container">
+                        <img src="${thumb}" alt="${item.product}">
+                    </div>
+                    <div class="product-details">
+                        <div class="product-name">${productName}</div>
+                        <div class="product-size"><span>Size:</span> ${productSize}</div>
+
+                        <div class="quantity-controls">
+                            <button class="quantity-btn decrement minus" data-id="${item.productId}">-</button>
+                            <span class="quantity-value">${item.quantity}</span>
+                            <button class="quantity-btn increment plus" data-id="${item.productId}">+</button>
+                        </div>
+                    </div>
+                </div>
+            `);
+                });
+
+                // ✅ update checkout total
+                $(".checkout-total").html(`Total : <span>$${total.toFixed(2)}</span>`);
+            }
+        }
+
+
+            $(document).on("click", ".iti__selected-dial-code", function (event) {
+                event.preventDefault();
+
+            });
+
+
+        const input = document.querySelector("#phone");
+        const iti = window.intlTelInput(input, {
+            initialCountry: "us",       // Default to US
+            onlyCountries: ["us"],      // Restrict to US only
+            separateDialCode: true,     // Show +1 separately
+            autoPlaceholder: "off",
+            utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.19/js/utils.js"
+        });
+        });
     </script>
 
 @endsection

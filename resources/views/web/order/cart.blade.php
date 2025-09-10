@@ -50,40 +50,6 @@
     <script>
         $(document).ready(function () {
             let cart = JSON.parse(localStorage.getItem("cart")) || [];
-            // Load Cart Items from Local Storage
-            {{--function updateCartPage() {--}}
-            {{--    let $cartPageList = $("#cart-page-list");--}}
-            {{--    $cartPageList.empty();--}}
-
-            {{--    if (cart.length === 0) {--}}
-            {{--        $cartPageList.append("<tr><td colspan='5'>Cart is empty</td></tr>");--}}
-            {{--    } else {--}}
-            {{--        cart.forEach(item => {--}}
-            {{--            var productDetailUrl = "{{ route('product.detail', ['id' => '000']) }}".replace('000', item.productId);--}}
-            {{--            $cartPageList.append(`--}}
-            {{--        <tr>--}}
-            {{--            <td ><a href="${productDetailUrl}" target="_blank">${item.productId}</a></td>--}}
-            {{--            <td><a href="${productDetailUrl}" target="_blank">${item.product}</a></td>--}}
-            {{--            <td>--}}
-            {{--                <div class="quantity-container">--}}
-            {{--                <div class="qty-container">--}}
-            {{--                    <button class="quantity-btn minus" data-product="${item.product}">−</button>--}}
-            {{--                    <input type="text" class="cart-quantity text-center" data-product="${item.product}" value="${item.quantity}" min="1" style="width: 40px;">--}}
-            {{--                    <button class="quantity-btn plus" data-product="${item.product}">+</button>--}}
-            {{--                </div>--}}
-            {{--                </div>--}}
-            {{--            </td>--}}
-            {{--            <td class="cart-price">$${item.price}</td>--}}
-            {{--            <td class="cart-price total-unit">$${(item.price * item.quantity).toFixed(2)}</td>--}}
-            {{--            <td>--}}
-            {{--                <button class="remove-item btn btn-sm btn-danger" data-product="${item.product}">Remove</button>--}}
-            {{--            </td>--}}
-            {{--        </tr>--}}
-            {{--    `);--}}
-            {{--        });--}}
-            {{--    }--}}
-            {{--}--}}
-
             updateCartPage(); // Update cart page on load
             syncCartWithSession(); // Sync cart with Laravel session on page load
 
