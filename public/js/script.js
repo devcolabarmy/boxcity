@@ -454,6 +454,10 @@ $(document).ready(function () {
             updateCartDrawer();
             openCartDrawer();
 
+            setTimeout(() => {
+                $container.find(".quantity-input").val(1);
+            }, 500);
+
         } else {
             alert("Quantity must be at least 1");
         }

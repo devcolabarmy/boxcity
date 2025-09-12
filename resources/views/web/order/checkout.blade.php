@@ -760,7 +760,7 @@
 
             document.getElementById("stripe-checkout-button").addEventListener("click", async function (e) {
                 e.preventDefault();
-
+                const button = e.target;
                 const totalElement = document.querySelector('.checkout-total');
                 const email = document.getElementById("email").value.trim();
                 const phone = document.getElementById("phone").value.trim();
@@ -789,7 +789,8 @@
                     return;
                 }
 
-                // Parse amount in dollars
+                button.disabled = true;
+                button.innerText = "Processing...";
                 const rawAmount = totalElement.innerText.replace(/[^0-9.]/g, '');
                 const amount = parseFloat(rawAmount);
 
@@ -827,6 +828,8 @@
                     if (data.error) {
                         console.error("Stripe session error:", data);
                         alert("Stripe error: " + data.error);
+                        button.disabled = false;
+                        button.innerText = "Checkout";
                         return;
                     }
 
@@ -836,10 +839,13 @@
 
                     if (result.error) {
                         alert(result.error.message);
+                        button.disabled = false;
+                        button.innerText = "Checkout";
                     }
                 } catch (err) {
                     console.error("Stripe Checkout failed:", err);
-                    alert("Payment initialization failed. Please try again.");
+                    button.disabled = false;
+                    button.innerText = "Checkout";
                 }
             });
 
@@ -891,48 +897,8 @@
 
 
 
-        $(window).on("scroll", function() {
-            let scrollTop = $(this).scrollTop();
-            let rowHeight = $(".main-checkout-row").outerHeight();
-            let footerTop = $("footer").offset().top; // Footer position
-            let windowHeight = $(window).height();
-
-            // Fade out gradually based on main-checkout-row height
-            let opacity = 1 - (scrollTop / rowHeight);
-            opacity = Math.max(0, Math.min(1, opacity));
-
-            // If footer is in view → force hide
-            if (scrollTop + windowHeight >= footerTop) {
-                opacity = 0;
-            }
-
-            $(".fade-box").css({
-                opacity: opacity,
-                "z-index": opacity <= 0 ? -1 : 1000
-            });
-        });
 
 
-        function checkFadeBoxHeight() {
-            $(".fade-box").each(function() {
-                let $box = $(this);
-                if ($box[0].scrollHeight > 600) {
-                    $box.css({
-                        "overflow-y": "scroll",
-                        "height": "600px"   // lock height
-                    });
-                } else {
-                    $box.css({
-                        "overflow-y": "visible",
-                        "height": "auto"
-                    });
-                }
-            });
-        }
-
-        // Run on page load + resize
-        $(document).ready(checkFadeBoxHeight);
-        $(window).on("resize", checkFadeBoxHeight);
 
 
         $(document).ready(function () {
@@ -966,10 +932,7 @@
             if (itemToUpdate) {
                 itemToUpdate.quantity = newQuantity;
                 applyGroupPricingForCheckout(cart);
-                // ✅ save back to localStorage
                 localStorage.setItem("cart", JSON.stringify(cart));
-
-                // ✅ re-render with updated values
                 renderCheckoutCart();
             }
         }

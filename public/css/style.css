@@ -16,7 +16,7 @@ section.quote p {
     text-decoration: none;
     width: 100%;
     margin-top: 20px;
-    background: #000;
+    background: #000 !important;
     padding: 14px 36px 14px 45px !important;
     text-transform: uppercase;
     color:#f8be00!important;
@@ -1056,6 +1056,18 @@ td {
 }
 
 
+.col-md-4.fade-box {
+    max-height: 680px;
+    overflow-y: auto;
+}
+
+
+.iti__country-list {
+    display: none !important;
+}
+
+
+
 @media screen and (min-width: 1600px) and (max-width: 1699px) {
     .offer h3,
     .offer h4 {
@@ -1112,10 +1124,7 @@ td {
         margin: 69px 98px !important;
     }
 
-    .col-md-4.fade-box {
-        position: fixed;
-        right: 180px !important;
-    }
+
 
 }
 .cart-container {
@@ -1187,10 +1196,7 @@ td {
         margin: 69px 98px !important;
     }
 
-    .col-md-4.fade-box {
-        position: fixed;
-        right: 180px !important;
-    }
+
 
 }
 @media screen and (min-width: 1400px) and (max-width: 1499px) {
@@ -1262,10 +1268,6 @@ td {
         padding: 0px 70px !important;
     }
 
-    .col-md-4.fade-box {
-        position: fixed;
-        right: 180px !important;
-    }
 
 }
 @media screen and (min-width: 1300px) and (max-width: 1399px) {
@@ -1350,10 +1352,7 @@ td {
         padding: 0px 70px !important;
     }
 
-    .col-md-4.fade-box {
-        position: fixed;
-        right: 180px !important;
-    }
+
 }
 @media screen and (min-width: 1200px) and (max-width: 1299px) {
     td,
@@ -1445,10 +1444,7 @@ td {
         padding: 0px 70px !important;
     }
 
-    .col-md-4.fade-box {
-        position: fixed;
-        right: 180px !important;
-    }
+
 }
 @media screen and (min-width: 1000px) and (max-width: 1099px) {
     header {
@@ -2755,6 +2751,18 @@ td {
         gap: 30px !important;
     }
 
+
+    .cart-btn-container {
+        display: flex;
+        width: 100%;
+        justify-content: flex-end;
+        gap: 10px;
+    }
+
+    #clear-cart.btn.btn-danger, #continue-shopping {
+        padding: 15px 19px !important;
+    }
+
 }
 @media screen and (min-width: 361px) and (max-width: 399px) {
     header {
@@ -2997,6 +3005,17 @@ td {
 
     .shipping-method-container {
         gap: 30px !important;
+    }
+
+    .cart-btn-container {
+        display: flex;
+        width: 100%;
+        justify-content: flex-end;
+        gap: 10px;
+    }
+
+    #clear-cart.btn.btn-danger, #continue-shopping {
+        padding: 15px 12px !important;
     }
 
 }
@@ -3265,6 +3284,19 @@ td {
     .shipping-method-container {
         gap: 30px !important;
     }
+
+    .cart-btn-container {
+        display: flex;
+        width: 100%;
+        justify-content: flex-end;
+        gap: 10px;
+    }
+
+    #clear-cart.btn.btn-danger, #continue-shopping {
+        padding: 15px 12px !important;
+        font-size: 14px !important;
+    }
+
 }
 .mobile-menu,
 body.menu-open::before {
@@ -3847,16 +3879,5 @@ button.quantity-btn.increment, .quantity-btn.decrement {
 }
 
 
-.col-md-4.fade-box {
-    position: fixed;
-    right: 290px;
-    z-index: 1000;
-    opacity: 1;
-    transition: opacity 0.5s ease-in-out, z-index 0.5s ease-in-out;
-}
 
-.col-md-4.fade-box.hide {
-    opacity: 0;
-    z-index: -999;
-}
 
