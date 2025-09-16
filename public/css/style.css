@@ -699,6 +699,8 @@ table tr:last-child td {
     padding: 10px 26px;
     cursor: pointer;
     border-radius: 31px;
+    color: #000 !important;
+
 }
 footer {
     background: #1d1d1d;
@@ -778,7 +780,7 @@ footer h2 {
 }
 .menu-btn a:before {
     content: "";
-    background: url(../assets/phone-icon.png) no-repeat;
+    background: url("../assets/phone-icon.png") no-repeat;
     position: absolute;
     width: 15px;
     height: 22px;
@@ -1111,7 +1113,7 @@ td {
         margin-top: 35px;
     }
     .offer {
-        background: url(https://boxcityweb.colabwebdemo.com/boxcity/public/assets/Offer-BG.png) 0 0 / cover no-repeat;
+        background: url('../assets/Offer-BG.png') 0 0 / cover no-repeat;
         margin: 20px 22px;
         padding: 40px 20px;
         border-radius: 13px;
@@ -2763,6 +2765,10 @@ td {
         padding: 15px 19px !important;
     }
 
+    .field-row{
+        flex-direction: column !important;
+    }
+
 }
 @media screen and (min-width: 361px) and (max-width: 399px) {
     header {
@@ -3016,6 +3022,10 @@ td {
 
     #clear-cart.btn.btn-danger, #continue-shopping {
         padding: 15px 12px !important;
+    }
+
+    .field-row{
+        flex-direction: column !important;
     }
 
 }
@@ -3297,6 +3307,10 @@ td {
         font-size: 14px !important;
     }
 
+    .field-row{
+        flex-direction: column !important;
+    }
+
 }
 .mobile-menu,
 body.menu-open::before {
@@ -3429,7 +3443,7 @@ body.menu-open::before {
 }
 .menu-item-has-children > a::after {
     content: "";
-    background: url(../assets/arrow.png) 0 0/100% no-repeat;
+    background: url("../assets/arrow.png") 0 0/100% no-repeat;
     width: 9px;
     height: 9px;
     display: inline-block;
@@ -3700,7 +3714,7 @@ section.quote textarea {
     box-shadow: 0px 0px 1px 0px #888;
     background-repeat: no-repeat;
     background-color: #DBDBDB;
-    background-image: url('http://localhost/boxcity/public/assets/USA-icon.png');
+    background-image: url("../assets/USA-icon.png");
     background-size: cover !important;
     background-position: center !important;
     height: 29px !important;

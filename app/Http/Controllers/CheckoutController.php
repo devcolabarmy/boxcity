@@ -10,6 +10,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\View\View;
 use Illuminate\Support\Facades\Log;
 use GuzzleHttp\Exception\GuzzleException;
+use Stevebauman\Location\Facades\Location;
 
 /**
  * Controller responsible for managing the checkout process.
@@ -45,7 +46,68 @@ class CheckoutController extends Controller
      */
     public function index(): View
     {
-        return view('web.order.checkout');
+        $ip = request()->ip();
+//        $position = Location::get($ip);
+        $position = Location::get('116.90.110.129');
+
+        $userLat = null;
+        $userLng = null;
+
+        if ($position) {
+            $userLat = $position->latitude;
+            $userLng = $position->longitude;
+        }
+
+        $stores = collect(config('stores'));
+        $nearestStore = null;
+        $nearestKey = null;
+        $minDistance = INF;
+
+        if ($userLat && $userLng) {
+            foreach ($stores as $store) {
+                $distance = $this->haversine($userLat, $userLng, $store['lat'], $store['lon']);
+                if ($distance < $minDistance) {
+                    $minDistance = $distance;
+                    $nearestStore = $store;
+                    $nearestKey = $store['key'];
+                }
+            }
+        }
+
+        if ($nearestStore) {
+            // Update label for nearest store
+            $stores = $stores->map(function ($store) use ($nearestKey) {
+                if ($store['key'] === $nearestKey) {
+                    $store['label'] .= ' (Nearest – with all the items)';
+                }
+                return $store;
+            });
+
+            // Move nearest store to top
+            $stores = $stores->sortByDesc(fn($store) => $store['key'] === $nearestKey)->values();
+        }
+
+        return view('web.order.checkout', [
+            'stores' => $stores,
+            'nearestKey' => $nearestKey,
+        ]);
+    }
+
+
+
+    private function haversine($lat1, $lon1, $lat2, $lon2)
+    {
+        $earthRadius = 6371; // km
+
+        $dLat = deg2rad($lat2 - $lat1);
+        $dLon = deg2rad($lon2 - $lon1);
+
+        $a = sin($dLat/2) * sin($dLat/2) +
+            cos(deg2rad($lat1)) * cos(deg2rad($lat2)) *
+            sin($dLon/2) * sin($dLon/2);
+
+        $c = 2 * atan2(sqrt($a), sqrt(1-$a));
+        return $earthRadius * $c;
     }
 
     /**

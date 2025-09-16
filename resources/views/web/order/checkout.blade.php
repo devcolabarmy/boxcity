@@ -13,7 +13,7 @@
     <div class="container checkout-container">
 
         <div class="page-title-container">
-            <a href="#" class="back"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <a href="{{route('cart')}}" class="back"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
                     <path d="M15 6L9 12L15 18" stroke="#33363F" stroke-width="2"/>
                 </svg></a>
         <h2 class="page-title">Check Out</h2>
@@ -109,20 +109,36 @@
                         <h3>Pickup Details</h3>
                         <div class="form-group">
                             <label for="pickup-location">Select Store Location</label>
+{{--                            <div class="custom-select-wrapper">--}}
+{{--                            <select id="pickup-location" name="pickup-location" class="form-control">--}}
+{{--                                <option disabled selected hidden>Select a Location</option>--}}
+{{--                                <option value="#1 Box City Van Nuys" name="Pickup-VanNuys">Van Nuys</option>--}}
+{{--                                <option value="#2 Box City North Hollywood" name="Pickup-NorthHollywood">North Hollywood</option>--}}
+{{--                                <option value="#3 Box City Westwood" name="Pickup-WestLosAngeles">West Los Angeles</option>--}}
+{{--                                <option value="#4 Box City Valencia" name="Pickup-Valencia">Valencia</option>--}}
+{{--                                <option value="#5 Box City Pasadena" name="Pickup-Pasadena">Pasadena</option>--}}
+{{--                                <option value="#6 Box City Marina" name="Pickup-MarinaDelRey">Marina Del Rey</option>--}}
+{{--                                <option value="#7 Box City Canoga Park" name="Pickup-CanogaPark">Canoga Park</option>--}}
+{{--                                <option value="#8 Box City - Glendale" name="Pickup-Glendale">Glendale</option>--}}
+{{--                                <option value="#9 Box City Azusa" name="Pickup-Azusa">Azusa</option>--}}
+{{--                            </select>--}}
+{{--                        </div>--}}
+
                             <div class="custom-select-wrapper">
-                            <select id="pickup-location" name="pickup-location" class="form-control">
-                                <option disabled selected hidden>Select a Location</option>
-                                <option value="#1 Box City Van Nuys" name="Pickup-VanNuys">Van Nuys</option>
-                                <option value="#2 Box City North Hollywood" name="Pickup-NorthHollywood">North Hollywood</option>
-                                <option value="#3 Box City Westwood" name="Pickup-WestLosAngeles">West Los Angeles</option>
-                                <option value="#4 Box City Valencia" name="Pickup-Valencia">Valencia</option>
-                                <option value="#5 Box City Pasadena" name="Pickup-Pasadena">Pasadena</option>
-                                <option value="#6 Box City Marina" name="Pickup-MarinaDelRey">Marina Del Rey</option>
-                                <option value="#7 Box City Canoga Park" name="Pickup-CanogaPark">Canoga Park</option>
-                                <option value="#8 Box City - Glendale" name="Pickup-Glendale">Glendale</option>
-                                <option value="#9 Box City Azusa" name="Pickup-Azusa">Azusa</option>
-                            </select>
-                        </div>
+                                <select id="pickup-location" name="pickup-location" class="form-control">
+                                    <option disabled {{ !$nearestKey ? 'selected' : '' }} hidden>Select a Location</option>
+                                    @foreach ($stores as $store)
+                                        <option value="{{ $store['value'] }}" data-key="{{ $store['key'] }}"
+                                            {{ $nearestKey === $store['key'] ? 'selected' : '' }}>
+                                            {{ $store['label'] }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+
+
+
                         </div>
 
                         <!-- Pickup Date -->

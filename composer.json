@@ -12,6 +12,7 @@
         "laravel/framework": "^11.31",
         "laravel/tinker": "^2.9",
         "paypal/paypal-server-sdk": "^1.1",
+        "stevebauman/location": "^7.6",
         "stripe/stripe-php": "^17.5"
     },
     "require-dev": {
