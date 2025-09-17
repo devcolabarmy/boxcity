@@ -3775,8 +3775,32 @@ section.quote textarea {
     gap: 160px;
 }
 
-.shipping-method-container img{
+.shipping-method-container{
     cursor: pointer;
+    transition: all 1s ease;
+}
+
+.shipping-option {
+    height: 160px;
+    width: 128px;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    transition: background 0.3s ease;
+}
+
+.shipping-option.delivery {
+    background-image: url("../assets/Delivery.png");
+}
+.shipping-option.delivery:hover , .shipping-option.delivery.active {
+    background-image: url("../assets/Delivery-Dark.png");
+}
+
+.shipping-option.pickup {
+    background-image: url("../assets/Pickup.png");
+}
+.shipping-option.pickup:hover, .shipping-option.pickup.active {
+    background-image: url("../assets/Pickup-Dark.png");
 }
 
 #checkout-form input[type="date"]{

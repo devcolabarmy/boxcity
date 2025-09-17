@@ -63,14 +63,14 @@
 
                         <!-- New image-based options -->
                         <div class="shipping-method-container">
-                            <div class="shipping-option" data-method="Delivery details">
+                            <div class="shipping-option delivery" data-method="Delivery details">
                                 <div>
-                                    <img src="{{ asset('public/assets/Delivery.png') }}" alt="Delivery">
+
                                 </div>
                             </div>
-                            <div class="shipping-option" data-method="Pickup method">
+                            <div class="shipping-option pickup" data-method="Pickup method">
                                 <div>
-                                    <img src="{{ asset('public/assets/PickUp.png') }}" alt="Pick Up">
+
                                 </div>
                             </div>
                         </div>
@@ -267,7 +267,7 @@
 
                             <!-- Address -->
                             <div class="form-group">
-                                <label for="address-text">Address</label>
+                                <label for="address-text">Street Address</label>
                                 <textarea id="address-text" name="shipping-address-text" class="form-control"></textarea>
                             </div>
                         </div>
