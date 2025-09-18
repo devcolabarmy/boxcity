@@ -113,6 +113,6 @@ class StripeController extends Controller
      */
     public function cancel()
     {
-        return "Payment Canceled!";
+        return view('web.order.cancel');
     }
 }

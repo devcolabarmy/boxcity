@@ -36,6 +36,7 @@ Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout');
 Route::post('/checkout/process', [CheckoutController::class, 'processCheckout'])->name('checkout.process');
 Route::get('/thank-you', [CheckoutController::class, 'thankyou'])->name('checkout.thankyou');
 
+Route::get('/payment-cancel', [CheckoutController::class, 'cancel'])->name('checkout.cancel');
 
 Route::get('/fetch-products', function () {
     Artisan::call('fetch:products');

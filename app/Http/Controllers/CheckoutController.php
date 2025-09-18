@@ -93,8 +93,6 @@ class CheckoutController extends Controller
         ]);
     }
 
-
-
     private function haversine($lat1, $lon1, $lat2, $lon2)
     {
         $earthRadius = 6371; // km

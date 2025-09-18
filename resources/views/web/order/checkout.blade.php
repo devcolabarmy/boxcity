@@ -37,6 +37,7 @@
                     <div class="form-group">
                         <label for="first-name">First Name</label>
                         <input type="text" id="first-name" name="first-name" class="form-control" required placeholder="First Name">
+                        <span id="fname-error" style="color: red; font-size: 13px; font-family: 'gilroy-semibolduploaded_file';"></span>
                     </div>
                         </div>
 
@@ -44,6 +45,7 @@
                             <div class="form-group">
                                 <label for="last-name">Last Name</label>
                                 <input type="text" id="last-name" name="last-name" class="form-control" required placeholder="Last Name">
+                                <span id="lname-error" style="color: red; font-size: 13px; font-family: 'gilroy-semibolduploaded_file';"></span>
                             </div>
                         </div>
                     </div>
@@ -54,6 +56,49 @@
                         <input type="email" id="email" name="email" class="form-control" required placeholder="Email Address">
                         <span id="email-error" style="color: red; font-size: 13px; font-family: 'gilroy-semibolduploaded_file';"></span>
                     </div>
+
+                        <div class="row form-row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="shipping-country">Country</label>
+                                    <div class="custom-select-wrapper">
+                                        <select id="shipping-country" name="shipping-country" class="form-control" disabled>
+                                            <option >Select Country</option>
+                                            <option value="US" disabled selected>United States</option>
+                                        </select>
+                                        <span id="delivery-country-error" style="color:red; font-size:13px; font-family:'gilroy-semibolduploaded_file';"></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="shipping-state">State</label>
+                                    <div class="custom-select-wrapper">
+                                        <select id="shipping-state" name="shipping-state" class="form-control">
+                                            <option disabled selected>Select State</option>
+                                        </select>
+                                        <span id="delivery-state-error" style="color:red; font-size:13px; font-family:'gilroy-semibolduploaded_file';"></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="shipping-city">City</label>
+                                    <input type="text" id="shipping-city" name="shipping-city" class="form-control" placeholder="City">
+                                    <span id="delivery-city-error" style="color:red; font-size:13px; font-family:'gilroy-semibolduploaded_file';"></span>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="shipping-zip">Zip Code</label>
+                                    <input type="text" id="shipping-zip" name="shipping-zip" class="form-control" placeholder="Zip Code">
+                                    <span id="delivery-zip-error" style="color:red; font-size:13px; font-family:'gilroy-semibolduploaded_file';"></span>
+                                </div>
+                            </div>
+                        </div>
 
                    </div>
                     <!-- Shipping Method -->
@@ -128,7 +173,13 @@
                                 <select id="pickup-location" name="pickup-location" class="form-control">
                                     <option disabled {{ !$nearestKey ? 'selected' : '' }} hidden>Select a Location</option>
                                     @foreach ($stores as $store)
-                                        <option value="{{ $store['value'] }}" data-key="{{ $store['key'] }}"
+                                        <option value="{{ $store['value'] }}"
+                                                data-key="{{ $store['key'] }}"
+                                                data-address="{{ $store['address'] }}"
+                                                data-city="{{ $store['city'] }}"
+                                                data-country="{{ $store['country'] }}"
+                                                data-email="{{ $store['email'] }}"
+                                                data-hours="{{ $store['hours'] }}"
                                             {{ $nearestKey === $store['key'] ? 'selected' : '' }}>
                                             {{ $store['label'] }}
                                         </option>
@@ -136,7 +187,7 @@
                                 </select>
                             </div>
 
-
+                            <div id="pickup-details" style="margin-top:15px;"></div>
 
 
                         </div>
@@ -148,50 +199,51 @@
                         </div>
 
                         <!-- Country, State, City, Postal Code -->
-                        <div class="row form-row">
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="pickup-country">Country</label>
-                                    <div class="custom-select-wrapper">
-                                    <select id="pickup-country" name="pickup-country" class="form-control">
-                                        <option disabled selected>Select Country</option>
-                                        <option value="US">United States</option>
-                                    </select>
-                                </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="pickup-state">State</label>
-                                    <div class="custom-select-wrapper">
-                                    <select id="pickup-state" name="pickup-state" class="form-control">
-                                        <option disabled selected>Select State</option>
-                                    </select>
-                                </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="pickup-city">City</label>
-                                    <div class="custom-select-wrapper">
-                                    <select id="pickup-city" name="pickup-city" class="form-control">
-                                        <option disabled selected>Select City</option>
-                                    </select>
-                                </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="pickup-postal">Zip Code</label>
-                                    <input type="text" id="pickup-postal" name="pickup-postal" class="form-control" placeholder="Zip Code">
-                                </div>
-                            </div>
-                        </div>
+{{--                        <div class="row form-row">--}}
+{{--                            <div class="col-md-6">--}}
+{{--                                <div class="form-group">--}}
+{{--                                    <label for="pickup-country">Country</label>--}}
+{{--                                    <div class="custom-select-wrapper">--}}
+{{--                                    <select id="pickup-country" name="pickup-country" class="form-control">--}}
+{{--                                        <option disabled selected>Select Country</option>--}}
+{{--                                        <option value="US">United States</option>--}}
+{{--                                    </select>--}}
+{{--                                </div>--}}
+{{--                                </div>--}}
+{{--                            </div>--}}
+{{--                            <div class="col-md-6">--}}
+{{--                                <div class="form-group">--}}
+{{--                                    <label for="pickup-state">State</label>--}}
+{{--                                    <div class="custom-select-wrapper">--}}
+{{--                                    <select id="pickup-state" name="pickup-state" class="form-control">--}}
+{{--                                        <option disabled selected>Select State</option>--}}
+{{--                                    </select>--}}
+{{--                                </div>--}}
+{{--                                </div>--}}
+{{--                            </div>--}}
+{{--                            <div class="col-md-6">--}}
+{{--                                <div class="form-group">--}}
+{{--                                    <label for="pickup-city">City</label>--}}
+{{--                                    <div class="custom-select-wrapper">--}}
+{{--                                    <select id="pickup-city" name="pickup-city" class="form-control">--}}
+{{--                                        <option disabled selected>Select City</option>--}}
+{{--                                    </select>--}}
+{{--                                </div>--}}
+{{--                                </div>--}}
+{{--                            </div>--}}
+{{--                            <div class="col-md-6">--}}
+{{--                                <div class="form-group">--}}
+{{--                                    <label for="pickup-postal">Zip Code</label>--}}
+{{--                                    <input type="text" id="pickup-postal" name="pickup-postal" class="form-control" placeholder="Zip Code">--}}
+{{--                                </div>--}}
+{{--                            </div>--}}
+{{--                        </div>--}}
 
                         <!-- Address -->
                         <div class="form-group">
                             <label for="pickup-address">Address</label>
                             <textarea id="pickup-address" name="pickup-address" class="form-control"></textarea>
+                            <span id="pickup-address-error" style="color:red; font-size:13px; font-family:'gilroy-semibolduploaded_file';"></span>
                         </div>
                     </div>
                     </div>
@@ -203,55 +255,55 @@
                         <div id="shipping-address">
                             <h3>Delivery Details</h3>
                             <!-- Country, State, City, Zip -->
-                            <div class="row form-row">
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label for="shipping-country">Country</label>
-                                        <div class="custom-select-wrapper">
-                                        <select id="shipping-country" name="shipping-country" class="form-control">
-                                            <option disabled selected>Select Country</option>
-                                            <option value="US">United States</option>
-                                        </select>
-                                    </div>
-                                    </div>
-                                </div>
+{{--                            <div class="row form-row">--}}
+{{--                                <div class="col-md-6">--}}
+{{--                                    <div class="form-group">--}}
+{{--                                        <label for="shipping-country">Country</label>--}}
+{{--                                        <div class="custom-select-wrapper">--}}
+{{--                                        <select id="shipping-country" name="shipping-country" class="form-control" disabled>--}}
+{{--                                            <option >Select Country</option>--}}
+{{--                                            <option value="US" disabled selected>United States</option>--}}
+{{--                                        </select>--}}
+{{--                                            <span id="delivery-country-error" style="color:red; font-size:13px; font-family:'gilroy-semibolduploaded_file';"></span>--}}
+{{--                                    </div>--}}
+{{--                                    </div>--}}
+{{--                                </div>--}}
 
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label for="shipping-state">State</label>
-                                        <div class="custom-select-wrapper">
-                                        <select id="shipping-state" name="shipping-state" class="form-control">
-                                            <option disabled selected>Select State</option>
-                                        </select>
-                                    </div>
-                                    </div>
-                                </div>
+{{--                                <div class="col-md-6">--}}
+{{--                                    <div class="form-group">--}}
+{{--                                        <label for="shipping-state">State</label>--}}
+{{--                                        <div class="custom-select-wrapper">--}}
+{{--                                        <select id="shipping-state" name="shipping-state" class="form-control">--}}
+{{--                                            <option disabled selected>Select State</option>--}}
+{{--                                        </select>--}}
+{{--                                            <span id="delivery-state-error" style="color:red; font-size:13px; font-family:'gilroy-semibolduploaded_file';"></span>--}}
+{{--                                    </div>--}}
+{{--                                    </div>--}}
+{{--                                </div>--}}
 
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label for="shipping-city">City</label>
-                                        <div class="custom-select-wrapper">
-                                        <select id="shipping-city" name="shipping-city" class="form-control">
-                                            <option disabled selected>Select City</option>
-                                        </select>
-                                    </div>
-                                    </div>
-                                </div>
+{{--                                <div class="col-md-6">--}}
+{{--                                    <div class="form-group">--}}
+{{--                                        <label for="shipping-city">City</label>--}}
+{{--                                            <input type="text" id="shipping-city" name="shipping-city" class="form-control" placeholder="City">--}}
+{{--                                        <span id="delivery-city-error" style="color:red; font-size:13px; font-family:'gilroy-semibolduploaded_file';"></span>--}}
+{{--                                    </div>--}}
+{{--                                </div>--}}
 
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label for="shipping-zip">Zip Code</label>
-                                        <input type="text" id="shipping-zip" name="shipping-zip" class="form-control" placeholder="Zip Code">
-                                    </div>
-                                </div>
-                            </div>
+{{--                                <div class="col-md-6">--}}
+{{--                                    <div class="form-group">--}}
+{{--                                        <label for="shipping-zip">Zip Code</label>--}}
+{{--                                        <input type="text" id="shipping-zip" name="shipping-zip" class="form-control" placeholder="Zip Code">--}}
+{{--                                        <span id="delivery-zip-error" style="color:red; font-size:13px; font-family:'gilroy-semibolduploaded_file';"></span>--}}
+{{--                                    </div>--}}
+{{--                                </div>--}}
+{{--                            </div>--}}
 
-                            <div class="form-group">
+                            <div class="form-group" style="display: none">
                                 <label for="delivery-location">Select Store Location</label>
                                 <div class="custom-select-wrapper">
                                 <select id="delivery-location" name="pickup-location" class="form-control">
-                                    <option disabled selected hidden>Select a Location</option>
-                                    <option value="Local delivery (#1 Box City Van Nuys)" name="Delivery-VanNuys">Van Nuys</option>
+                                    <option disabled hidden>Select a Location</option>
+                                    <option value="Local delivery (#1 Box City Van Nuys)" name="Delivery-VanNuys" selected>Van Nuys</option>
                                     <option value="Local delivery (#2 Box City North Hollywood)" name="Delivery-NorthHollywood">North Hollywood</option>
                                     <option value="Local delivery (#3 Box City Westwood)" name="Delivery-WestLosAngeles">West Los Angeles</option>
                                     <option value="Local delivery (#4 Box City Valencia)" name="Delivery-Valencia">Valencia</option>
@@ -269,6 +321,7 @@
                             <div class="form-group">
                                 <label for="address-text">Street Address</label>
                                 <textarea id="address-text" name="shipping-address-text" class="form-control"></textarea>
+                                <span id="delivery-address-error" style="color:red; font-size:13px; font-family:'gilroy-semibolduploaded_file';"></span>
                             </div>
                         </div>
 
@@ -297,8 +350,6 @@
                         <h4 class="checkout-total">Total: $0.00</h4>
                         <button id="place-order" type="submit" class="btn btn-success btn-lg">Place Order</button>
                     </div>
-
-{{--                    <div id="paypal-button-container"></div>--}}
 
                     <button id="stripe-checkout-button" class="stripe-button">Checkout</button>
                 </form>
@@ -422,7 +473,6 @@
                 let email = $("#email").val();
                     let phone = $("#phone").val().trim();
 
-// Ensure +1 is added only once
                     if (!phone.startsWith("+1")) {
                         phone = "+1" + phone.replace(/^(\+1)?/, "");
                     }
@@ -477,10 +527,10 @@
                 } else {
                     // Delivery values
                     address = deliveryAddress;
-                    country = $("#shipping-country").val();
-                    state = $("#shipping-state").val();
-                    city = $("#shipping-city").val();
-                    postcode = $("#shipping-zip").val();
+                    country = $("#pickup-country").val();
+                    state = $("#pickup-state").val();
+                    city = $("#pickup-city").val();
+                    postcode = $("#pickup-postal").val();
                     Location = $('#delivery-location').val();
 
                     console.log("Delivery Address:", address);
@@ -493,10 +543,10 @@
 
 
 
-                if (!firstName || !lastName || !email || !phone || !address || !country || !state || !city || !postcode) {
-                    alert("Please fill all fields before placing the order.");
-                    return;
-                }
+                // if (!firstName || !lastName || !email || !phone || !address || !country || !state || !city || !postcode) {
+                //     alert("Please fill all fields before placing the order.");
+                //     return;
+                // }
 
                 // Retrieve cart items from localStorage
                 let cartItems = JSON.parse(localStorage.getItem("cart")) || [];
@@ -741,7 +791,7 @@
                 const pickupCityDropdown = $("#pickup-city");
 
                 const deliveryStateDropdown = $("#shipping-state");
-                const deliveryCityDropdown = $("#shipping-city");
+
 
                 // Populate both state dropdowns
                 Object.keys(citiesByState).forEach(function (state) {
@@ -764,11 +814,11 @@
                 // On delivery state change
                 deliveryStateDropdown.change(function () {
                     const selectedState = $(this).val();
-                    deliveryCityDropdown.empty().append('<option value="" disabled selected>Select City</option>');
+
 
                     if (citiesByState[selectedState]) {
                         citiesByState[selectedState].forEach(function (city) {
-                            deliveryCityDropdown.append(`<option value="${city}">${city}</option>`);
+
                         });
                     }
                 });
@@ -783,10 +833,14 @@
                 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
                 const phonePattern = /^(\+1\s?)?(\([0-9]{3}\)|[0-9]{3})[-\s]?[0-9]{3}[-\s]?[0-9]{4}$/;
                 let isValid = true;
+                let firstInvalidField = null;
+                let activeShipping = document.querySelector(".shipping-option.active");
+                let method = activeShipping ? activeShipping.getAttribute("data-method") : null;
 
                 if (!phonePattern.test(phone)) {
                     document.getElementById("phone-error").innerText = "Please enter a valid phone number.";
                     isValid = false;
+                    if (!firstInvalidField) firstInvalidField = document.getElementById("phone");
                 } else {
                     document.getElementById("phone-error").innerText = "";
                 }
@@ -794,9 +848,95 @@
                 if (!emailPattern.test(email)) {
                     document.getElementById("email-error").innerText = "Please enter a valid email address.";
                     isValid = false;
+                    if (!firstInvalidField) firstInvalidField = document.getElementById("email");
                 } else {
                     document.getElementById("email-error").innerText = "";
                 }
+
+
+                let firstName = document.getElementById("first-name").value.trim();
+                if (firstName === "") {
+                    document.getElementById("fname-error").innerText = "First name is required.";
+                    isValid = false;
+                    if (!firstInvalidField) firstInvalidField = document.getElementById("first-name");
+                } else {
+                    document.getElementById("fname-error").innerText = "";
+                }
+
+                let lastName = document.getElementById("last-name").value.trim();
+                if (lastName === "") {
+                    document.getElementById("lname-error").innerText = "Last name is required.";
+                    isValid = false;
+                    if (!firstInvalidField) firstInvalidField = document.getElementById("last-name");
+                } else {
+                    document.getElementById("lname-error").innerText = "";
+                }
+
+                let deliveryCountry = document.getElementById("shipping-country").value;
+                if (deliveryCountry === "Select Country") {
+                    document.getElementById("delivery-country-error").innerText = "Country is required.";
+                    isValid = false;
+                    if (!firstInvalidField) firstInvalidField = document.getElementById("shipping-country");
+                } else {
+                    document.getElementById("delivery-country-error").innerText = "";
+                }
+
+                let deliveryState = document.getElementById("shipping-state").value;
+                if (deliveryState === "Select State") {
+                    document.getElementById("delivery-state-error").innerText = "Please select a state.";
+                    isValid = false;
+                    if (!firstInvalidField) firstInvalidField = document.getElementById("shipping-state");
+                } else {
+                    document.getElementById("delivery-state-error").innerText = "";
+                }
+
+                let deliveryCity = document.getElementById("shipping-city").value.trim();
+                if (deliveryCity === "") {
+                    document.getElementById("delivery-city-error").innerText = "City is required.";
+                    isValid = false;
+                    if (!firstInvalidField) firstInvalidField = document.getElementById("shipping-city");
+                } else {
+                    document.getElementById("delivery-city-error").innerText = "";
+                }
+
+                let deliveryZip = document.getElementById("shipping-zip").value.trim();
+                let zipPattern = /^[0-9]{4,10}$/; // 4–10 digits
+                if (!zipPattern.test(deliveryZip)) {
+                    document.getElementById("delivery-zip-error").innerText = "Please enter a valid Zip Code.";
+                    isValid = false;
+                } else {
+                    document.getElementById("delivery-zip-error").innerText = "";
+                }
+
+
+                if (method === "Delivery details") {
+                    let deliveryAddress = document.getElementById("address-text").value.trim();
+                    if (deliveryAddress === "") {
+                        document.getElementById("delivery-address-error").innerText = "Street address is required.";
+                        isValid = false;
+                        if (!firstInvalidField) firstInvalidField = document.getElementById("address-text");
+                    } else {
+                        document.getElementById("delivery-address-error").innerText = "";
+                    }
+                }
+
+                if (method === "Pickup method") {
+                    let pickupAddress = document.getElementById("pickup-address").value.trim();
+                    if (pickupAddress === "") {
+                        document.getElementById("pickup-address-error").innerText = "address is required.";
+                        isValid = false;
+                        if (!firstInvalidField) firstInvalidField = document.getElementById("pickup-address");
+                    } else {
+                        document.getElementById("pickup-address-error").innerText = "";
+                    }
+                }
+
+                if (!isValid && firstInvalidField) {
+                    firstInvalidField.scrollIntoView({ behavior: "smooth", block: "center" });
+                    firstInvalidField.focus();
+                    return;
+                }
+
 
                 if (!isValid) return;
 
@@ -1016,6 +1156,40 @@
             utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.19/js/utils.js"
         });
         });
+
+
+        function updatePickupDetails() {
+            let select = document.getElementById('pickup-location');
+            let selectedOption = select.options[select.selectedIndex];
+
+            if (!selectedOption) return; // safety check
+
+            let address = selectedOption.getAttribute('data-address');
+            let city = selectedOption.getAttribute('data-city');
+            let zip = selectedOption.getAttribute('data-zip');
+            let country = selectedOption.getAttribute('data-country');
+            let email = selectedOption.getAttribute('data-email');
+            let hours = selectedOption.getAttribute('data-hours');
+
+            let detailsHtml = `
+        <div class="location-address">
+            <p><strong>Pickup location</strong></p>
+            <p>${address}</p>
+            <p>${city}, ${zip}</p>
+            <p>${country}</p>
+            <p>${email}</p>
+            <p><strong>Business hours</strong></p>
+            <p>${hours}</p>
+        </div>
+    `;
+
+            document.getElementById('pickup-details').innerHTML = detailsHtml;
+        }
+
+        document.getElementById('pickup-location').addEventListener('change', updatePickupDetails);
+        document.addEventListener('DOMContentLoaded', updatePickupDetails);
+
+
     </script>
 
 @endsection
