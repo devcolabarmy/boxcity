@@ -16,12 +16,36 @@
             <a href="{{route('cart')}}" class="back"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
                     <path d="M15 6L9 12L15 18" stroke="#33363F" stroke-width="2"/>
                 </svg></a>
-        <h2 class="page-title">Check Out</h2>
+        <h2 class="page-title">Delivery Details</h2>
         </div>
         <div class="row main-checkout-row">
             {{-- Billing Details Section --}}
             <div class="col-md-6">
                 <form id="checkout-form">
+
+                    <div class="info-container">
+                        <div class="form-group">
+                            <h3>Select Shipping Method</h3>
+
+                            <!-- New image-based options -->
+                            <div class="shipping-method-container">
+                                <div class="shipping-option delivery" data-method="Delivery details">
+                                    <div>
+
+                                    </div>
+                                </div>
+                                <div class="shipping-option pickup" data-method="Pickup method">
+                                    <div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Hidden field to store selection -->
+                            <input type="hidden" id="shipping-method" name="shipping-method">
+                        </div>
+                    </div>
+
                     <div class="info-container">
                         <h3>Contact Info</h3>
                     <div class="row field-row">
@@ -98,34 +122,32 @@
                                     <span id="delivery-zip-error" style="color:red; font-size:13px; font-family:'gilroy-semibolduploaded_file';"></span>
                                 </div>
                             </div>
+                            <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="address-text">Street Address</label>
+                                <textarea id="address-text" name="shipping-address-text" class="form-control"></textarea>
+                                <span id="delivery-address-error" style="color:red; font-size:13px; font-family:'gilroy-semibolduploaded_file';"></span>
+                            </div>
+                            </div>
                         </div>
 
                    </div>
-                    <!-- Shipping Method -->
-                <div class="info-container">
-                    <div class="form-group">
-                        <h3>Select Shipping Method</h3>
-
-                        <!-- New image-based options -->
-                        <div class="shipping-method-container">
-                            <div class="shipping-option delivery" data-method="Delivery details">
-                                <div>
-
-                                </div>
-                            </div>
-                            <div class="shipping-option pickup" data-method="Pickup method">
-                                <div>
-
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Hidden field to store selection -->
-                        <input type="hidden" id="shipping-method" name="shipping-method">
-                    </div>
-                </div>
 
                     <script>
+                        function updatePageTitle() {
+                            let activeShipping = document.querySelector(".shipping-option.active");
+                            if (!activeShipping) return;
+
+                            let method = activeShipping.getAttribute("data-method");
+                            let pageTitle = document.querySelector(".page-title");
+
+                            if (method === "Delivery details") {
+                                pageTitle.innerHTML = "Shipping Details";
+                            } else if (method === "Pickup method") {
+                                pageTitle.innerHTML = "Pickup Details";
+                            }
+                        }
+
                         const options = document.querySelectorAll(".shipping-option");
                         const hiddenInput = document.getElementById("shipping-method");
 
@@ -139,13 +161,29 @@
                                 if (option.dataset.method === "Pickup method") {
                                     document.getElementById("pickup-section").classList.remove("d-none");
                                     document.getElementById("delivery-section").classList.add("d-none");
+                                    updatePageTitle();
                                 } else {
                                     document.getElementById("delivery-section").classList.remove("d-none");
                                     document.getElementById("pickup-section").classList.add("d-none");
+                                    updatePageTitle();
                                 }
                             });
                         });
+
+                        // ✅ On page load: set Delivery as default
+                        window.addEventListener("DOMContentLoaded", () => {
+                            const defaultOption = document.querySelector('.shipping-option[data-method="Delivery details"]');
+                            if (defaultOption) {
+                                defaultOption.classList.add("active");
+                                hiddenInput.value = defaultOption.dataset.method;
+
+                                document.getElementById("delivery-section").classList.remove("d-none");
+                                document.getElementById("pickup-section").classList.add("d-none");
+                                updatePageTitle();
+                            }
+                        });
                     </script>
+
 
                     <!-- PICKUP SECTION -->
 
@@ -240,17 +278,17 @@
 {{--                        </div>--}}
 
                         <!-- Address -->
-                        <div class="form-group">
-                            <label for="pickup-address">Address</label>
-                            <textarea id="pickup-address" name="pickup-address" class="form-control"></textarea>
-                            <span id="pickup-address-error" style="color:red; font-size:13px; font-family:'gilroy-semibolduploaded_file';"></span>
-                        </div>
+{{--                        <div class="form-group">--}}
+{{--                            <label for="pickup-address">Address</label>--}}
+{{--                            <textarea id="pickup-address" name="pickup-address" class="form-control"></textarea>--}}
+{{--                            <span id="pickup-address-error" style="color:red; font-size:13px; font-family:'gilroy-semibolduploaded_file';"></span>--}}
+{{--                        </div>--}}
                     </div>
                     </div>
 
                     <!-- DELIVERY SECTION -->
 
-                    <div id="delivery-section" class="d-none">
+                    <div id="delivery-section" class="d-none" style="display: none !important;">
                         <div class="info-container">
                         <div id="shipping-address">
                             <h3>Delivery Details</h3>
@@ -318,30 +356,30 @@
 
 
                             <!-- Address -->
-                            <div class="form-group">
-                                <label for="address-text">Street Address</label>
-                                <textarea id="address-text" name="shipping-address-text" class="form-control"></textarea>
-                                <span id="delivery-address-error" style="color:red; font-size:13px; font-family:'gilroy-semibolduploaded_file';"></span>
-                            </div>
+{{--                            <div class="form-group">--}}
+{{--                                <label for="address-text">Street Address</label>--}}
+{{--                                <textarea id="address-text" name="shipping-address-text" class="form-control"></textarea>--}}
+{{--                                <span id="delivery-address-error" style="color:red; font-size:13px; font-family:'gilroy-semibolduploaded_file';"></span>--}}
+{{--                            </div>--}}
                         </div>
 
 
-                        <div class="form-group">
-                        <label class="form-check-label" for="delivery-address"> Delivery Address</label>
-                        </div>
+{{--                        <div class="form-group">--}}
+{{--                        <label class="form-check-label" for="delivery-address"> Delivery Address</label>--}}
+{{--                        </div>--}}
 
-                        <div class="form-check mb-2 mt-2">
+{{--                        <div class="form-check mb-2 mt-2">--}}
 
-                            <input class="form-check-input" type="checkbox" id="same-as-billing">
-                            <label class="form-check-label" for="same-as-billing">
-                                Same as Billing Address
-                            </label>
-                        </div>
+{{--                            <input class="form-check-input" type="checkbox" id="same-as-billing">--}}
+{{--                            <label class="form-check-label" for="same-as-billing">--}}
+{{--                                Same as Billing Address--}}
+{{--                            </label>--}}
+{{--                        </div>--}}
 
-                        <div class="form-group">
-                            <label for="shipping-address-text">Shipping Address</label>
-                            <textarea id="shipping-address-text" name="shipping-address-text" class="form-control"></textarea>
-                        </div>
+{{--                        <div class="form-group">--}}
+{{--                            <label for="shipping-address-text">Shipping Address</label>--}}
+{{--                            <textarea id="shipping-address-text" name="shipping-address-text" class="form-control"></textarea>--}}
+{{--                        </div>--}}
                     </div>
                     </div>
 
@@ -355,7 +393,7 @@
                 </form>
             </div>
 
-            {{-- Order Summary Section --}}
+
             <div class="col-md-4 fade-box">
                 <div class="info-container">
                 <h3>Order Summary</h3>
@@ -508,7 +546,7 @@
                 let address, country, state, city, postcode, Location;
                 //Pickup values
                 if (isPickup) {
-                    address = $("#pickup-address").val();
+                    address = $('#address-text').val();
                     country = $("#pickup-country").val();
                     state = $("#pickup-state").val();
                     city = $("#pickup-city").val();
@@ -526,7 +564,7 @@
 
                 } else {
                     // Delivery values
-                    address = deliveryAddress;
+                    address = $('#address-text').val();
                     country = $("#pickup-country").val();
                     state = $("#pickup-state").val();
                     city = $("#pickup-city").val();
@@ -824,6 +862,14 @@
                 });
             });
 
+
+
+
+
+
+
+
+
             document.getElementById("stripe-checkout-button").addEventListener("click", async function (e) {
                 e.preventDefault();
                 const button = e.target;
@@ -920,16 +966,16 @@
                     }
                 }
 
-                if (method === "Pickup method") {
-                    let pickupAddress = document.getElementById("pickup-address").value.trim();
-                    if (pickupAddress === "") {
-                        document.getElementById("pickup-address-error").innerText = "address is required.";
-                        isValid = false;
-                        if (!firstInvalidField) firstInvalidField = document.getElementById("pickup-address");
-                    } else {
-                        document.getElementById("pickup-address-error").innerText = "";
-                    }
-                }
+                // if (method === "Pickup method") {
+                //     let pickupAddress = document.getElementById("pickup-address").value.trim();
+                //     if (pickupAddress === "") {
+                //         document.getElementById("pickup-address-error").innerText = "address is required.";
+                //         isValid = false;
+                //         if (!firstInvalidField) firstInvalidField = document.getElementById("pickup-address");
+                //     } else {
+                //         document.getElementById("pickup-address-error").innerText = "";
+                //     }
+                // }
 
                 if (!isValid && firstInvalidField) {
                     firstInvalidField.scrollIntoView({ behavior: "smooth", block: "center" });
