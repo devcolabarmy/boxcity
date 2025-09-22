@@ -12,14 +12,15 @@ section.quote p {
     border: none;
     border-radius: 40px;
     cursor: pointer;
-    transition: .2s ease-in-out;
+    transition: .2s
+    ease-in-out;
     text-decoration: none;
     width: 100%;
     margin-top: 20px;
     background: #000 !important;
     padding: 14px 36px 14px 45px !important;
-    text-transform: uppercase;
-    color:#f8be00!important;
+    color: #f8be00 !important;
+    font-size: 22px;
 }
 .stripe-button:hover {
     transform: scale(0.97);
