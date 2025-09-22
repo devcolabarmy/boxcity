@@ -124,7 +124,7 @@
                             </div>
                             <div class="col-md-12">
                             <div class="form-group">
-                                <label for="address-text">Street Address</label>
+                                <label for="address-text" id="address-text-label">Street Address</label>
                                 <textarea id="address-text" name="shipping-address-text" class="form-control"></textarea>
                                 <span id="delivery-address-error" style="color:red; font-size:13px; font-family:'gilroy-semibolduploaded_file';"></span>
                             </div>
@@ -140,11 +140,15 @@
 
                             let method = activeShipping.getAttribute("data-method");
                             let pageTitle = document.querySelector(".page-title");
+                            let addressTitle = document.getElementById("address-text-label");
+
 
                             if (method === "Delivery details") {
                                 pageTitle.innerHTML = "Shipping Details";
+                                addressTitle.innerHTML = "Street Address";
                             } else if (method === "Pickup method") {
                                 pageTitle.innerHTML = "Pickup Details";
+                                addressTitle.innerHTML = "Comments";
                             }
                         }
 
