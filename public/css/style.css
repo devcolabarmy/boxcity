@@ -3511,7 +3511,7 @@ body.menu-open::before {
     margin-top: 50px;
     margin-bottom: 50px;
 }
-.checkout-total {
+.checkout-total , .checkout-sub-total, .shipping-cost  {
     display: flex;
     justify-content: space-between;
     color: #101010;

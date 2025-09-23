@@ -35,6 +35,7 @@ Route::post('/cart/clear', [CartController::class, 'clear'])->name('cart.clear')
 Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout');
 Route::post('/checkout/process', [CheckoutController::class, 'processCheckout'])->name('checkout.process');
 Route::get('/thank-you', [CheckoutController::class, 'thankyou'])->name('checkout.thankyou');
+Route::post('/checkout/validate-zip', [CheckoutController::class, 'validateZip'])->name('checkout.validate-zip');
 
 Route::get('/payment-cancel', [CheckoutController::class, 'cancel'])->name('checkout.cancel');
 

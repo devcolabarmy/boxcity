@@ -134,6 +134,29 @@
                    </div>
 
                     <script>
+
+
+                        function updateCheckout() {
+                            $('.checkout-sub-total').show();
+                            $('.shipping-cost').show();
+                            let subTotalText = $('.checkout-sub-total span').text().trim(); // "$58.48"
+                            let subTotal = parseFloat(subTotalText.replace(/[$,]/g, ''));
+                            console.log('Parsed subtotal:', subTotal); // should log 58.48
+                            let shipping = 0;
+
+                            if (subTotal >= 300) {
+                                shipping = 0;
+                                $('.shipping-cost').html('Shipping Cost : <span>Free</span>');
+                            } else {
+                                shipping = 30;
+                                $('.shipping-cost').html(`Shipping Cost : <span>$${shipping}</span>`);
+                            }
+
+                            let total = subTotal + shipping;
+                            console.log('Total:', total); // should log 88.48 for your case
+                            $('.checkout-total').html(`Total : <span>$${total.toFixed(2)}</span>`);
+                        }
+
                         function updatePageTitle() {
                             let activeShipping = document.querySelector(".shipping-option.active");
                             if (!activeShipping) return;
@@ -152,6 +175,26 @@
                             }
                         }
 
+                        function applyPickupMethod() {
+                            // Hide subtotal and shipping sections
+                            $('.checkout-sub-total').hide();
+                            $('.shipping-cost').hide();
+
+                            // Get current subtotal
+                            let subTotalText = $('.checkout-sub-total span').text().trim();
+                            let subTotal = parseFloat(subTotalText.replace(/[$,]/g, ''));
+
+                            // Pickup = shipping always 0
+                            let shipping = 0;
+                            let grandTotal = subTotal + shipping;
+
+                            // Update total display
+                            $('.checkout-total').html(`Total <span>$${grandTotal.toFixed(2)}</span>`);
+
+                            console.log("Pickup applied → Subtotal hidden, Shipping = 0, Total:", grandTotal);
+                        }
+
+
                         const options = document.querySelectorAll(".shipping-option");
                         const hiddenInput = document.getElementById("shipping-method");
 
@@ -166,15 +209,16 @@
                                     document.getElementById("pickup-section").classList.remove("d-none");
                                     document.getElementById("delivery-section").classList.add("d-none");
                                     updatePageTitle();
+                                    applyPickupMethod();
                                 } else {
                                     document.getElementById("delivery-section").classList.remove("d-none");
                                     document.getElementById("pickup-section").classList.add("d-none");
                                     updatePageTitle();
+                                    updateCheckout();
                                 }
                             });
                         });
 
-                        // ✅ On page load: set Delivery as default
                         window.addEventListener("DOMContentLoaded", () => {
                             const defaultOption = document.querySelector('.shipping-option[data-method="Delivery details"]');
                             if (defaultOption) {
@@ -196,21 +240,6 @@
                         <h3>Pickup Details</h3>
                         <div class="form-group">
                             <label for="pickup-location">Select Store Location</label>
-{{--                            <div class="custom-select-wrapper">--}}
-{{--                            <select id="pickup-location" name="pickup-location" class="form-control">--}}
-{{--                                <option disabled selected hidden>Select a Location</option>--}}
-{{--                                <option value="#1 Box City Van Nuys" name="Pickup-VanNuys">Van Nuys</option>--}}
-{{--                                <option value="#2 Box City North Hollywood" name="Pickup-NorthHollywood">North Hollywood</option>--}}
-{{--                                <option value="#3 Box City Westwood" name="Pickup-WestLosAngeles">West Los Angeles</option>--}}
-{{--                                <option value="#4 Box City Valencia" name="Pickup-Valencia">Valencia</option>--}}
-{{--                                <option value="#5 Box City Pasadena" name="Pickup-Pasadena">Pasadena</option>--}}
-{{--                                <option value="#6 Box City Marina" name="Pickup-MarinaDelRey">Marina Del Rey</option>--}}
-{{--                                <option value="#7 Box City Canoga Park" name="Pickup-CanogaPark">Canoga Park</option>--}}
-{{--                                <option value="#8 Box City - Glendale" name="Pickup-Glendale">Glendale</option>--}}
-{{--                                <option value="#9 Box City Azusa" name="Pickup-Azusa">Azusa</option>--}}
-{{--                            </select>--}}
-{{--                        </div>--}}
-
                             <div class="custom-select-wrapper">
                                 <select id="pickup-location" name="pickup-location" class="form-control">
                                     <option disabled {{ !$nearestKey ? 'selected' : '' }} hidden>Select a Location</option>
@@ -240,53 +269,6 @@
                             <input type="date" id="pickup-date" name="pickup-date" class="form-control">
                         </div>
 
-                        <!-- Country, State, City, Postal Code -->
-{{--                        <div class="row form-row">--}}
-{{--                            <div class="col-md-6">--}}
-{{--                                <div class="form-group">--}}
-{{--                                    <label for="pickup-country">Country</label>--}}
-{{--                                    <div class="custom-select-wrapper">--}}
-{{--                                    <select id="pickup-country" name="pickup-country" class="form-control">--}}
-{{--                                        <option disabled selected>Select Country</option>--}}
-{{--                                        <option value="US">United States</option>--}}
-{{--                                    </select>--}}
-{{--                                </div>--}}
-{{--                                </div>--}}
-{{--                            </div>--}}
-{{--                            <div class="col-md-6">--}}
-{{--                                <div class="form-group">--}}
-{{--                                    <label for="pickup-state">State</label>--}}
-{{--                                    <div class="custom-select-wrapper">--}}
-{{--                                    <select id="pickup-state" name="pickup-state" class="form-control">--}}
-{{--                                        <option disabled selected>Select State</option>--}}
-{{--                                    </select>--}}
-{{--                                </div>--}}
-{{--                                </div>--}}
-{{--                            </div>--}}
-{{--                            <div class="col-md-6">--}}
-{{--                                <div class="form-group">--}}
-{{--                                    <label for="pickup-city">City</label>--}}
-{{--                                    <div class="custom-select-wrapper">--}}
-{{--                                    <select id="pickup-city" name="pickup-city" class="form-control">--}}
-{{--                                        <option disabled selected>Select City</option>--}}
-{{--                                    </select>--}}
-{{--                                </div>--}}
-{{--                                </div>--}}
-{{--                            </div>--}}
-{{--                            <div class="col-md-6">--}}
-{{--                                <div class="form-group">--}}
-{{--                                    <label for="pickup-postal">Zip Code</label>--}}
-{{--                                    <input type="text" id="pickup-postal" name="pickup-postal" class="form-control" placeholder="Zip Code">--}}
-{{--                                </div>--}}
-{{--                            </div>--}}
-{{--                        </div>--}}
-
-                        <!-- Address -->
-{{--                        <div class="form-group">--}}
-{{--                            <label for="pickup-address">Address</label>--}}
-{{--                            <textarea id="pickup-address" name="pickup-address" class="form-control"></textarea>--}}
-{{--                            <span id="pickup-address-error" style="color:red; font-size:13px; font-family:'gilroy-semibolduploaded_file';"></span>--}}
-{{--                        </div>--}}
                     </div>
                     </div>
 
@@ -403,6 +385,8 @@
                 <h3>Order Summary</h3>
                 <div id="checkout-cart-container">
                 </div>
+                    <h4 class="checkout-sub-total">Subtotal: $0.00</h4>
+                    <h4 class="shipping-cost">Shipping Cost: $0.00</h4>
                     <h4 class="checkout-total"></h4>
                 </div>
 
@@ -502,7 +486,8 @@
         // `);
                 });
             }
-            $(".checkout-total").html(`Total : <span>$${total.toFixed(2)}</span>`);
+
+            $(".checkout-sub-total").html(`Sub Total : <span>$${total.toFixed(2)}</span>`);
 
 
 
@@ -598,15 +583,20 @@
                     return;
                 }
 
-                let totalAmount = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
+                    let totalAmount = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
+                    let shipping = 0;
+                    if (!isPickup) {
+                    let shipping = totalAmount < 300 ? 30 : 0;
+                    }
+                    let grandTotal = totalAmount + shipping;
 
                 let orderData = {
                     subtotal: totalAmount,
                     subtotalWithoutTax: totalAmount,
-                    total: totalAmount,
-                    totalWithoutTax: totalAmount,
+                    total: grandTotal,
+                    totalWithoutTax: grandTotal,
                     giftCardRedemption: 0,
-                    totalBeforeGiftCardRedemption: totalAmount,
+                    totalBeforeGiftCardRedemption: grandTotal,
                     giftCardDoubleSpending: false,
                     email: email,
                     paymentMethod: "Credit or Debit card.",
@@ -697,8 +687,8 @@
                     },
                     shippingOption: {
                         shippingMethodName: Location,
-                        shippingRate: 0,
-                        shippingRateWithoutTax: 0,
+                        shippingRate: shipping,
+                        shippingRateWithoutTax: shipping,
                         isPickup: false,
                         fulfillmentType: isPickup ? "PICKUP" : "DELIVERY",
                         isShippingLimit: false
@@ -1099,6 +1089,14 @@
                 newQuantity = Math.max(1, value - 1);
                 $quantityValue.text(newQuantity);
             }
+
+            let priceText = $itemCard.find(".product-price").text().trim(); // e.g. "$58.48"
+            let price = parseFloat(priceText.replace(/[$,]/g, ''));
+            let newSubTotal = price * newQuantity;
+
+            // Update the subtotal UI
+            $('.checkout-sub-total span').text(`$${newSubTotal.toFixed(2)}`);
+            updateCheckout();
         });
 
 
@@ -1143,6 +1141,12 @@
             }
         }
 
+
+
+
+
+            // Run on page load
+            updateCheckout();
         // Render checkout cart
         function renderCheckoutCart() {
             let cart = JSON.parse(localStorage.getItem("cart")) || [];
@@ -1185,8 +1189,8 @@
             `);
                 });
 
-                // ✅ update checkout total
-                $(".checkout-total").html(`Total : <span>$${total.toFixed(2)}</span>`);
+                $(".checkout-sub-total").html(`Sub Total : <span>$${total.toFixed(2)}</span>`);
+                updateCheckout();
             }
         }
 
@@ -1238,6 +1242,14 @@
 
         document.getElementById('pickup-location').addEventListener('change', updatePickupDetails);
         document.addEventListener('DOMContentLoaded', updatePickupDetails);
+
+
+
+
+
+
+
+
 
 
     </script>
