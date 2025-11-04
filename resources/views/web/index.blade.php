@@ -13,41 +13,32 @@
         <section class="products-container">
             <div class="container">
                 <div class="row">
-                    <div class="col-lg-9 col-sm-12">
+                    <div class="mobile-layout col-12">
                         <div class="banner-img-mobile">
                             <img src="{{asset('public/assets/Mobile-Version.webp')}}"/>
                         </div>
 
-                        <div class="offer">
-                            <h3>Why Choose<br/>Box City? </h3>
-                            <ul>
-                                <li>Lowest Price Guarantee</li>
-                                <li>Same-Day Local Pickup</li>
-                                <li>Next Day Delivery</li>
-                                <li>Trusted By Business Owners</li>
-                            </ul>
-
-                            <h4>Call Us For All Your Packing & Shipping Needs</h4>
-                            <h3><a href="tel:8009926924">(800) 992-6924</a></h3>
-                        </div>
+                     
                         <!-- Bulk order section -->
                         <div class="bulk-orders">
-                            <h3>
-                                For bigger bulk orders exceeding 100 boxes, reach out to our partnerships team at
-                                <a href="mailto:partnerships@boxcity.com">partnerships@boxcity.com</a>
-                            </h3>
+                            <h3>Need Over 100 boxes?</h3>
+                                <button class="bulk-partner-btn">
+                                    <a href="mailto:partnerships@boxcity.com">E-mail Our Partnerships Team</a>
+                                </button>
                         </div>
+                        <div style="position: relative">
+                        <div class="mobile-accordion-container">
 
-                        <div class="accordion" id="accordionExample">
+                        <div class="accordion mobile-accordion" id="accordionExample">
                             <!-- Length filter -->
                             <div class="accordion-item">
                                 <h2 class="accordion-header" id="headingOne">
-                                    <button class="accordion-button" type="button" data-bs-toggle="collapse"
-                                            data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                            data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
                                         Length
                                     </button>
                                 </h2>
-                                <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne">
+                                <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne">
                                     <div class="accordion-body">
                                         <ul>
                                             @foreach ($sizes as $size)
@@ -85,9 +76,25 @@
                                 </div>
                             </div>
                         </div>
-
+                    </div>
+                    
                         <div class="product-table">
                         </div>
+                    </div>
+ @if ($agent->isMobile() || $agent->isTablet())
+                           <div class="offer">
+                            <h3>Why Choose<br/>Box City? </h3>
+                            <ul>
+                                <li>Lowest Price Guarantee</li>
+                                <li>Same-Day Local Pickup</li>
+                                <li>Next Day Delivery</li>
+                                <li>Trusted By Business Owners</li>
+                            </ul>
+
+                            <h4>Call Us For All Your Packing & Shipping Needs</h4>
+                            <h3><a href="tel:8009926924">(800) 992-6924</a></h3>
+                        </div>
+                        @endif
                     </div>
                 </div>
             </div>
@@ -128,7 +135,7 @@
                         <!-- Bulk order section -->
                         <div class="bulk-orders">
                             <h3>
-                                For bigger bulk orders exceeding 100 boxes, reach out to our partnerships team at
+                                For orders exceeding 100 boxes, reach out to our partnerships team at
                                 <a href="mailto:partnerships@boxcity.com">partnerships@boxcity.com</a>
                             </h3>
                         </div>

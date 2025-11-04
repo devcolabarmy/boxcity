@@ -14,13 +14,10 @@
         <table id="product-table" class="responsive-table">
             <thead>
             <tr>
-                <th>Product ID</th>
-                <th>Product Name</th>
+                <th>ID</th>
+                <th>Name</th>
                 <th>Quantity</th>
-                <th style="display: none">Unit Price</th>
-                <th style="display: none">Retail Price</th>
-                <th>Total Price</th>
-                <th style="display: none">You Save</th>
+                <th>Total</th>
                 <th>Action</th>
             </tr>
             </thead>
@@ -30,20 +27,21 @@
             </tbody>
         </table>
         </div>
+        <div class="clear-cart-container">
+          <span id="clear-cart" class="clear-cart-btn">Clear Cart</span>
+        </div>
         {{-- Cart Total and Clear Button --}}
         <div class="cart-total-container">
-            <div class="cart-btn-container">
-                <button id="clear-cart" class="btn btn-danger">Clear Cart</button>
-                <a href="{{route('home')}}" id="continue-shopping" class="btn btn-danger">Continue Shopping</a>
-            </div>
-            <h3 class="cart-total">Sub Total :</h3>
+            <h3 class="cart-total">Subtotal :</h3>
 
         </div>
-        <h3 class="save-amount-heading"><span class="save-amount">You Save :</span></h3>
+        <h3 class="save-amount-heading"><span class="save-amount"></span></h3>
         {{-- Proceed to Checkout Button --}}
-        <div class="proceed-container">
+        <div class="proceed-container"> 
+            <a href="{{route('home')}}" id="continue-shopping" class="btn btn-danger">Continue Shopping</a>
             <button id="proceed-to-checkout" class="btn btn-danger">Proceed To Checkout</button>
         </div>
+         
     </div>
 
 
@@ -60,7 +58,7 @@
                     method: "POST",
                     data: { cart: cart, _token: "{{ csrf_token() }}" },
                     success: function (response) {
-                        console.log("Cart synced with session!");
+                        
                     }
                 });
             }

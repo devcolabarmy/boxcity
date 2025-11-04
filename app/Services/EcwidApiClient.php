@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\GuzzleException;
 use Psr\Http\Message\ResponseInterface;
 
@@ -37,7 +38,6 @@ class EcwidApiClient
 
     /**
      * EcwidApiClient constructor.
-     *
      */
     public function __construct()
     {
@@ -57,6 +57,7 @@ class EcwidApiClient
     public function get(string $endpoint, array $queryParams = []): ResponseInterface
     {
         $url = $this->baseUrl . $endpoint;
+
         return $this->client->request('GET', $url, [
             'headers' => [
                 'Authorization' => 'Bearer ' . $this->accessToken,
@@ -78,7 +79,7 @@ class EcwidApiClient
     public function fetchProducts(int $limit, int $offset, int $category = null): array
     {
         $response = $this->get('/products', [
-            'category' =>  $category ?? config('ecwid.category_id'),
+            'category' => $category ?? config('ecwid.category_id'),
             'limit' => $limit,
             'offset' => $offset,
         ]);
@@ -107,7 +108,6 @@ class EcwidApiClient
 
         return json_decode($response->getBody()->getContents(), true);
     }
-
     /**
      * Post an order to the Ecwid API
      *
@@ -115,6 +115,7 @@ class EcwidApiClient
      * @return array
      * @throws GuzzleException
      */
+
     public function postOrder(array $orderData): array
     {
         $url = $this->baseUrl . '/orders';
@@ -135,14 +136,46 @@ class EcwidApiClient
 
             return [
                 'error' => 'Failed to place the order. Status code: ' . $response->getStatusCode(),
+                'status_code' => $response->getStatusCode(),
                 'details' => $response->getBody()->getContents(),
             ];
+        } catch (ClientException $e) {
+            $response = $e->getResponse();
 
+            return [
+                'error' => 'Client error while placing the order',
+                'status_code' => $response ? $response->getStatusCode() : null,
+                'details' => $response ? (string) $response->getBody() : null,
+                'message' => $e->getMessage(),
+            ];
         } catch (\Exception $e) {
             return [
-                'error' => 'Error occurred while placing the order: ' . $e->getMessage(),
+                'error' => 'An error occurred while placing the order: ' . $e->getMessage(),
+                'exception' => $e->getMessage(),
             ];
         }
     }
 
+    /**
+     * Fetch shipping options from the Ecwid API.
+     *
+     * @return array
+     */
+    public function fetchShippingOptions(): array
+    {
+        $url = $this->baseUrl . '/profile/shippingOptions';
+
+        try {
+            $response = $this->client->request('GET', $url, [
+                'headers' => [
+                    'Authorization' => 'Bearer ' . $this->accessToken,
+                    'Accept' => 'application/json',
+                ],
+            ]);
+
+            return json_decode($response->getBody()->getContents(), true);
+        } catch (\Exception $e) {
+            return [];
+        }
+    }
 }

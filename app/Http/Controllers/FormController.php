@@ -22,6 +22,7 @@ class FormController extends Controller
         $validated = $request->validate([
             'your-name' => 'required|string|max:255',
             'your-company' => 'nullable|string|max:255',
+            'your-email' => 'required|email|max:255',
             'your-phone' => 'required|string|max:20',
             'select-service' => 'required|string|max:255',
             'your-message' => 'required|string',
@@ -43,12 +44,13 @@ class FormController extends Controller
         ]);
 
         // Send mail
-        Mail::to(env('MAIL_FROM_ADDRESS'))->send(new AppMailer(
+        Mail::to($formFields['your-email'])->send(new AppMailer(
             "Welcome to the BoxCity!",
             "emails.contact",
             [
                 'userName' => $formFields['your-name'],
                 'company' => $formFields['your-company'] ?? '',
+                'email' => $formFields['your-email'] ?? '',
                 'phone' => $formFields['your-phone'],
                 'service' => $formFields['select-service'],
                 'msg' => $formFields['your-message']

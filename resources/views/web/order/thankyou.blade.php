@@ -13,9 +13,18 @@
     @else
         <div class="thank-you">
             <h1>Thank you for your order!</h1>
-            <p>Your order was placed successfully. You’ll receive a confirmation email shortly.</p>
+            <p>Your order was placed successfully. You will receive a confirmation email shortly.</p>
             <a href="{{ route('home') }}" class="btn">Go back to Home</a>
         </div>
     @endif
+
+
+    @if(session('clear_local_cart'))
+        <script>
+            localStorage.removeItem('cart');
+        </script>
+    @endif
+   
+
 
 @endsection

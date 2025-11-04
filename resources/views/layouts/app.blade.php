@@ -6,12 +6,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- Google Tag Manager -->
-    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-                new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-            j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-            'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-        })(window,document,'script','dataLayer','GTM-T77PQBGD');</script>
+    <script>
+    // (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    //             new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    //         j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    //         'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    //     })(window,document,'script','dataLayer','GTM-T77PQBGD');
+    </script>
     <!-- End Google Tag Manager -->
+    
+    
+    <!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-MB433BJ4');</script>
+<!-- End Google Tag Manager -->
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.19/css/intlTelInput.css" integrity="sha512-gxWow8Mo6q6pLa1XH/CcH8JyiSDEtiwJV78E+D+QP0EVasFs8wKXq16G8CLD4CJ2SnonHr4Lm/yY2fSI2+cbmw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <title>@yield('title') </title>
@@ -27,23 +38,31 @@
           integrity="sha512-6lLUdeQ5uheMFbWm3CP271l14RsX1xtx+J5x2yeIDkkiBpeVTNhTqijME7GgRKKi6hCqovwCoBTlRBEC20M8Mg=="
           crossorigin="anonymous" referrerpolicy="no-referrer"/>
     <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+    
+    
+    <script>var $wc_load=function(a){return  JSON.parse(JSON.stringify(a))},$wc_leads=$wc_leads||{doc:{url:$wc_load(document.URL),ref:$wc_load(document.referrer),search:$wc_load(location.search),hash:$wc_load(location.hash)}};</script>
+<script src="//s.ksrndkehqnwntyxlhgto.com/140812.js"></script>
+    
 </head>
 
+
+<!-- Google tag (gtag.js) --> <script async src="https://www.googletagmanager.com/gtag/js?id=AW-16836195263"></script> <script>   window.dataLayer = window.dataLayer || [];   function gtag(){dataLayer.push(arguments);}   gtag('js', new Date());    gtag('config', 'AW-16836195263'); </script>
+
 <header>
-    <div class="container-fluid">
+    <div class="container">
         <div class="row align-items-center justify-content-between">
             <!-- Logo -->
-            <div class="col-md-2 col-6 text-center">
+            <div class="col-md-3 col-6 ">
                 <a href="{{route('home')}}">
                     <img src="{{ asset('public/assets/header-logo.png')}}" alt="logo">
                 </a>
             </div>
 
 
-            <div class="col-md-10 col-6 d-flex justify-content-end align-items-center">
+            <div class="col-md-9 col-6 d-flex justify-content-end align-items-center">
                 <nav class="d-none d-lg-block mb-hide">
                     <ul class="sub-menu d-flex justify-content-end">
-                        <li><a href="javascript:void(0)">Shop Products</a>
+                        <li><a href="javascript:void(0)">Products</a>
                             <ul class="primary-sub-menu">
                                 <li><a href="{{ config('app.site_url') }}gift-supplies">Gift Supplies</a></li>
                                 <li><a href="{{ config('app.site_url') }}bags-and-pouches">Bags And Pouches</a></li>
@@ -75,9 +94,9 @@
                         </li>
 
                         <li><a href="{{ config('app.site_url') }}custom-tape">Locations</a></li>
-                        <li><a href="{{ config('app.site_url') }}b2b-incentives/">Wholesale / Bulk Orders</a></li>
+                        {{-- <li><a href="{{ config('app.site_url') }}b2b-incentives/">Bulk Orders</a></li> --}}
                         <li><a href="{{ config('app.site_url') }}custom-boxes/">Contact</a></li>
-                        <li class="menu-btn"><a href="tel:8009926924">(800) 992-6924</a></li>
+                        <li class="menu-btn"><a href="tel:3107062246">(310) 706-2246</a></li>
                     </ul>
                 </nav>
 
@@ -120,7 +139,7 @@
                         <li><a href="{{ config('app.site_url') }}custom-tape/">Locations</a></li>
                         <li><a href="{{ config('app.site_url') }}b2b-incentives/">Wholesale / Bulk Orders</a></li>
                         <li><a href="{{ config('app.site_url') }}custom-boxes/">Contact</a></li>
-                        <li class="menu-btn"><a href="tel:8009926924">(800) 992-6924</a></li>
+                        <li class="menu-btn"><a href="tel:3107062246">(310) 706-2246</a></li>
                     </ul>
                 </div>
             </div>
@@ -145,9 +164,21 @@
 </div>
 
 <body>
+<script>
+  fbq('track', 'Purchase', {
+    currency: 'USD',
+  });
+</script>    
+    
 <!-- Google Tag Manager (noscript) -->
-<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-T77PQBGD"
-                  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!--<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-T77PQBGD"-->
+<!--                  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>-->
+<!-- End Google Tag Manager (noscript) -->
+
+
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MB433BJ4"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- End Google Tag Manager (noscript) -->
 
 <main>
@@ -178,8 +209,8 @@
                         today to pack and ship any item.
                     </p>
                     <div class="phone-numer">
-                        <a href="tel:8009926924"><img src="{{ asset('public/assets/phone-icon-1.png')}}" alt="Logo"
-                                                      width="auto" height="auto"> <span>(800) 992-6924</span></a>
+                        <a href="tel:310-706-2246"><img src="{{ asset('public/assets/phone-icon-1.png')}}" alt="Logo"
+                                                      width="auto" height="auto"> <span>(310) 706-2246</span></a>
                     </div>
                 </div>
             </div>

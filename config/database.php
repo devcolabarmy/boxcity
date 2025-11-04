@@ -116,9 +116,9 @@ return [
         'wordpress' => [
             'driver'    => 'mysql',
             'host'      => env('WP_DB_HOST', 'localhost:3306'),
-            'database'  => env('WP_DB_DATABASE', 'boxcitywebcolab_wp_gcnh9'),
-            'username'  => env('WP_DB_USERNAME', 'boxcitywebcolab_wp_hsme5'),
-            'password'  => env('WP_DB_PASSWORD', 'u5xD^3Tonb!88Kas'),
+            'database'  => env('WP_DB_DATABASE', 'boxcity_live'),
+            'username'  => env('WP_DB_USERNAME', 'boxcity_live-user'),
+            'password'  => env('WP_DB_PASSWORD', 'boxcity_live-user@123$'),
             'charset'   => 'utf8',
             'collation' => 'utf8_unicode_520_ci',
             'prefix'    => 'g1SONFX_',

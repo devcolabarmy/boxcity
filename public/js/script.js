@@ -63,27 +63,7 @@ document.addEventListener('DOMContentLoaded', function () {
 // }
 
 function applyDataLabels() {
-    const headers = [
-        "Product ID :", "Name :", "Retail Price :", "Discounted Bulk Price", "12+ :", "50+ :", "100+ :"
-    ];
-
-    $("#product-list tr").each(function () {
-        const $row = $(this);
-        const $cells = $row.find("td");
-
-        // Only insert if not already added (to prevent duplication)
-        if ($cells.length === 6 || $cells.length === 7) {
-            // Insert an empty <td> after the third cell (index 2)
-            $("<td></td>").insertAfter($cells.eq(2));
-        }
-
-        // Apply data-labels after adding the new <td>
-        $row.find("td").each(function (index) {
-            if (headers[index]) {
-                $(this).attr("data-label", headers[index]);
-            }
-        });
-    });
+    // Data labels are defined server-side within the Blade template.
 }
 
 // let nextPageUrl = 'load-more-products';
@@ -151,18 +131,19 @@ function updateCartTotal() {
         total += price;
     });
 
-    $(".cart-total").text(`Cart Sub Total : $${total.toFixed(2)}`);
+    $(".cart-total").text(`Subtotal : $${total.toFixed(2)}`);
 }
 
 
 function updateTotalPrice() {
+    
     let total = 0;
 
     cart.forEach(item => {
         total += item.price * item.quantity;
     });
 
-    $(".cart-total").text(`Cart Sub Total : $${total.toFixed(2)}`);
+    $(".cart-total").text(`Subtotal : $${total.toFixed(2)}`);
 
     let totalSaved = 0;
 
@@ -171,7 +152,12 @@ function updateTotalPrice() {
         totalSaved += itemSaved;
     });
 
-    $('.save-amount').text(`You Save : $${totalSaved.toFixed(2)}`);
+    if(totalSaved > 0){
+$('.save-amount').text(`You Save : $${totalSaved.toFixed(2)}`);
+    }else{
+         $(".save-amount").text("");
+    }
+    
 
 }
 
@@ -280,8 +266,8 @@ function updateCartPage() {
 
                 $cartPageList.append(`
                     <tr>
-                        <td data-label="Product ID :"><a href="${productDetailUrl.replace('000', item.productId)}">${item.productId}</a></td>
-                        <td data-label="Product Name :"><a href="${productDetailUrl.replace('000', item.productId)}">${item.product}</a></td>
+                        <td data-label="Id :"><a href="${productDetailUrl.replace('000', item.productId)}">${item.productId}</a></td>
+                        <td data-label="Name :"><a href="${productDetailUrl.replace('000', item.productId)}">${item.product}</a></td>
                         <td data-label="Quantity :">
                             <div class="quantity-container">
                             <div class="qty-container">
@@ -293,9 +279,9 @@ function updateCartPage() {
                         </td>
                         <td class="cart-price" style="display: none !important;">$${item.price}</td>
                         <td class="cart-price total-unit" style="display: none !important;">$${item.retailPrice}</td>
-                        <td class="cart-price total-unit" data-label="Total Price :">$${(item.price * item.quantity).toFixed(2)}</td>
+                        <td class="cart-price total-unit" data-label="Total :">$${(item.price * item.quantity).toFixed(2)}</td>
                         <td class="cart-price total-unit discount-amout" style="display: none !important;">$${(item.retailPrice * item.quantity - item.price * item.quantity).toFixed(2)}</td>
-                        <td data-label="Action :">
+                        <td data-label="">
                             <button class="remove-item btn btn-danger btn-sm" data-product="${item.product}">Remove</button>
                         </td>
                     </tr>
@@ -489,9 +475,20 @@ $(document).ready(function () {
 
 
     function applyDataLabelsCart() {
-        const headers = [
-            "Product ID :", "Product Name :", "Quantity :", "Total Price :", "Action :",
+
+        let headers;
+        if(cart.length === 0){
+            headers = [
+            "", "Name :", "Quantity :", "Total :", "Action :",
         ];
+        } else{
+            headers = [
+            "Id:", "Name :", "Quantity :", "Total :", "Action :",
+        ];
+        }
+
+      
+
 
         $("#cart-page-list tr").each(function () {
             $(this).find("td").each(function (index) {

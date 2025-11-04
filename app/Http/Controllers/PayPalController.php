@@ -54,7 +54,7 @@ class PayPalController extends Controller
             // Optional: temporary for debugging
             return response()->json([
                 'message' => 'Order captured successfully!',
-                'paypal_response' => $response
+                
             ]);
 
              $checkoutRequest = new CheckoutRequest($request->all());

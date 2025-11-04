@@ -7,8 +7,13 @@
 
         <div class="thank-you">
             <h1>Payment Canceled</h1>
-            <p>Your payment was cancelled. No charges were made</p>
+            @if(session('error'))
+                <p>{{ session('error') }}</p>
+            @else
+                <p>Payment was cancelled. No charges were made</p>
+            @endif
             <a href="{{ route('home') }}" class="btn">Go back to Home</a>
         </div>
+
 
 @endsection

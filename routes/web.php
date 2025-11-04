@@ -8,8 +8,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\ProductController;
-use App\Jobs\FetchCategoriesFromApi;
-use App\Http\Controllers\PayPalController;
+
 use App\Http\Controllers\StripeController;
 
 
@@ -65,10 +64,21 @@ Route::post('/stripe/create-order', [StripeController::class, 'createOrder'])->n
 Route::post('/stripe/capture-order', [StripeController::class, 'captureOrder'])->name('stripe.capture');
 Route::get('/stripe/success', [StripeController::class, 'success'])->name('stripe.success');
 Route::get('/stripe/cancel', [StripeController::class, 'cancel'])->name('stripe.cancel');
+Route::post('/cart/sync', [\App\Http\Controllers\CheckoutController::class, 'syncCart'])
+    ->name('cart.sync');
+
 
 
 Route::post('/store-ecwid-order', function (Request $request) {
     session(['ecwid_order_id' => $request->ecwid_order_id]);
     return response()->json(['success' => true]);
 })->name('store.ecwid.order');
+
+Route::post('/cart/sync', [CheckoutController::class, 'syncCart'])->name('cart.sync');
+Route::post('/checkout/stock-notes', [CheckoutController::class, 'stockNotes'])->name('checkout.stock_notes');
+// routes/web.php
+Route::post('/checkout/stock-detail', [CheckoutController::class, 'stockDetail'])->name('checkout.stock_detail');
+
+
+
 

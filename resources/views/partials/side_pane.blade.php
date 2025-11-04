@@ -3,7 +3,7 @@
 use App\Models\Category;
 ?>
 
-<div class="col-sm-3">
+<div class="col-lg-3 col-sm-12">
     <div class="accordion" id="accordionExample">
         <!-- Length filter -->
         <div class="accordion-item">
@@ -63,7 +63,7 @@ use App\Models\Category;
         </ul>
 
         <h4>Call Us For All Your Packing & Shipping Needs</h4>
-        <h3><a href="tel:8009926924">(800) 992-6924</a></h3>
+        <h3><a href="tel:3107062246">(310) 706-2246</a></h3>
     </div>
 
 </div>

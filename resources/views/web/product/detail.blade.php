@@ -61,29 +61,29 @@
                         <tbody id="product-list">
                         <tr>
                             <!-- Product ID -->
-                            <td><a class="product-single" href="#" id="product-id">{{ $product->productId }}</a></td>
+                            <td data-label="Product ID :"><a class="product-single" href="#" id="product-id">{{ $product->productId }}</a></td>
 
                             <!-- Product Name -->
-                            <td><a class="product-single" href="#" id="product-name">{{ $product->name }}</a></td>
+                            <td data-label="Name :"><a class="product-single" href="#" id="product-name">{{ $product->name }}</a></td>
 
                             <!-- Retail Price -->
-                            <td class="retail-price" id="retail-price">{{ config('app.currency_symbol') }}{{ $product->price }}</td>
+                            <td class="retail-price" id="retail-price" data-label="Retail Price :">{{ config('app.currency_symbol') }}{{ $product->price }}</td>
 
                             <!-- Bulk Price: 12+ -->
-                            <td class="bulk-price-12" id="bulk-12">{!! calculatePrice($product->price, 12) !!}</td>
+                            <td class="bulk-price-12" id="bulk-12" data-label="12+ :">{!! calculatePrice($product->price, 12) !!}</td>
 
                             <!-- Bulk Price: 50+ -->
-                            <td class="bulk-price-50" id="bulk-50">{!! calculatePrice($product->price, 50) !!}</td>
+                            <td class="bulk-price-50" id="bulk-50" data-label="50+ :">{!! calculatePrice($product->price, 50) !!}</td>
 
                             <!-- Bulk Price: 100+ -->
-                            <td class="bulk-price-100" id="bulk-100">{!! calculatePrice($product->price, 100) !!}</td>
+                            <td class="bulk-price-100" id="bulk-100" data-label="100+ :">{!! calculatePrice($product->price, 100) !!}</td>
 
                             <!-- Quantity Selector + Add Button -->
-                            <td>
+                            <td data-label="Add To Cart :">
                                 <div class="quantity-container">
                                     <!-- Quantity Increment/Decrement Controls -->
                                     <div class="qty-container">
-                                        <button class="quantity-btn minus">−</button>
+                                        <button class="quantity-btn minus">-</button>
                                         <input type="text" class="quantity-input" value="1">
                                         <button class="quantity-btn plus">+</button>
                                     </div>
